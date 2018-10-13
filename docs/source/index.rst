@@ -9,7 +9,9 @@ Welcome to Meta-Get's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :titlesonly:
 
+    Internal <./internal.rst>
 
 
 Indices and tables

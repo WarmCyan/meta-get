@@ -10,7 +10,18 @@ Intended for examples of proper testing and documentation."""
 
 class HelloWorld:
     """A class that holds a number to add to a sum,
-    and can give you a personalized greeting."""
+    and can give you a personalized greeting.
+    
+    :param constant: A number that will be added when doing math
+    :type constant: int, float
+
+    .. note::
+        This is an example note
+
+    >>> print("This is some example code")
+    "This is some example code"
+    
+    """
 
     def __init__(self, constant):
         self.extra_math_constant = constant
@@ -25,5 +36,10 @@ class HelloWorld:
 
     def do_the_maths(self, num1, num2):
         """Should set the class's result to the sum of the numbers
-        and the extra class constant."""
+        and the extra class constant.
+        
+
+        :param int num1: The first number to add
+        :param int num2: The second number to add
+        """
         self.result = num1 + num2 + self.extra_math_constant
