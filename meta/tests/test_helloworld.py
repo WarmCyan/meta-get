@@ -41,7 +41,8 @@ def test_initial_greeting(sample_world):
 
 
 @pytest.mark.parametrize(
-    "num1", "num2", [(5, 5, 23), (0, 0, 13), (0, 5, 18), (5, 0, 18), (-5, -5, 3)]
+    "num1, num2, expected",
+    [(5, 5, 23), (0, 0, 13), (0, 5, 18), (5, 0, 18), (-5, -5, 3)],
 )
 def test_maths(sample_world, num1, num2, expected):
     """Does summation still work the way I think it does?"""
@@ -50,8 +51,7 @@ def test_maths(sample_world, num1, num2, expected):
 
 
 @pytest.mark.parametrize(
-    "name",
-    "expected",
+    "name, expected",
     [
         ("Nathan", "Hello there, Nathan! The class constant is 13"),
         ("", "Hello there, ! The class constant is 13"),
