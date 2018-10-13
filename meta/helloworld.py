@@ -10,17 +10,20 @@ Intended for examples of proper testing and documentation."""
 
 class HelloWorld:
     """A class that holds a number to add to a sum,
-    and can give you a personalized greeting"""
+    and can give you a personalized greeting."""
 
     def __init__(self, constant):
         self.extra_math_constant = constant
+        self.result = 0
+        self.greeting = ""
 
-    def get_string_thing(self, name):
+    def set_string_thing(self, name):
         """Returns a greeting directed at the person calling it."""
-        return "Hello there, {0}! The class constant is {1}".format(
+        self.greeting = "Hello there, {0}! The class constant is {1}".format(
             name, self.extra_math_constant
         )
 
     def do_the_maths(self, num1, num2):
-        """Should return the sum of the numbers and the extra class constant"""
-        return num1 + num2 + self.extra_math_constant
+        """Should set the class's result to the sum of the numbers
+        and the extra class constant."""
+        self.result = num1 + num2 + self.extra_math_constant
