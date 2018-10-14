@@ -1,4 +1,3 @@
-========
 Internal
 ========
 
@@ -9,3 +8,8 @@ helloworld
 .. automodule:: meta.helloworld
 .. autoclass:: HelloWorld
     :members:
+
+shell
+-----
+.. automodule:: meta.shell
+.. autofunction:: execute

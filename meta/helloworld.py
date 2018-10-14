@@ -38,7 +38,6 @@ class HelloWorld:
         """Should set the class's result to the sum of the numbers
         and the extra class constant.
         
-
         :param int num1: The first number to add
         :param int num2: The second number to add
         """
