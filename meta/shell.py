@@ -15,7 +15,9 @@ from meta.exceptions import UnsupportedOS
 
 # TODO: add parameter to silence output
 def execute(command):
-    """Runs the passed shell command based on the operating system."""
+    """Runs the passed shell command based on the operating system and returns the
+    output."""
+
     # determine how subprocess expects the command to be split,
     # based on operating system (windows doesn't require split)
     if platform.system() == "Windows":
@@ -36,11 +38,15 @@ def execute(command):
 
     # handle command output as it occurs
     # TODO: incorporate into logging
+    output = ""
     with cmd_process.stdout:
-        for character in iter(lambda: cmd_process.stdout.read(1), ""):
+        for character in iter(lambda: cmd_process.stdout.read(1).decode("utf-8"), ""):
+            output += character
             sys.stdout.write(character)
             sys.stdout.flush()
 
     # check for problems with the execution
     if cmd_process.wait() != 0:
         raise subprocess.CalledProcessError(cmd_process.returncode, args)
+
+    return output

@@ -7,10 +7,10 @@ help:
 	@echo "    make opendocs     opens the documentation pages in a browser (utilizes xdg-open)"
 
 lint:
-	pylint meta
+	pylint meta/*
 
 tests:
-	@cd meta; pytest
+	pytest meta/tests
 
 docs:
 	@cd docs; make html

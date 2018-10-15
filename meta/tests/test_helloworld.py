@@ -7,7 +7,7 @@
 
 import pytest
 
-from helloworld import HelloWorld
+from meta.helloworld import HelloWorld
 
 # --------------------------------------
 #   Fixtures
