@@ -10,5 +10,5 @@ class UnsupportedOS(Exception):
     """Raised if attempted on an unknown operating system."""
 
 
-class EmtpyCommand(Exception):
+class EmptyCommand(Exception):
     """Raised if attempted to run a blank "" command."""

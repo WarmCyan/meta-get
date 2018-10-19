@@ -10,7 +10,7 @@ import shlex
 import subprocess
 import sys
 
-from meta.exceptions import UnsupportedOS, EmtpyCommand
+from meta.exceptions import UnsupportedOS, EmptyCommand
 
 
 def execute(command, silent=True):
@@ -19,7 +19,7 @@ def execute(command, silent=True):
 
     # check that the command isn't an empty string
     if command == "":
-        raise EmtpyCommand()
+        raise EmptyCommand()
 
     # determine how subprocess expects the command to be split,
     # based on operating system (windows doesn't require split)

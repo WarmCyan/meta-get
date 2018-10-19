@@ -55,7 +55,7 @@ def test_execute_raises_unsupportedos(mocker):
 
 def test_blank_execute_raises_emptycommand():
     """Ensure running a blank command raises an exception."""
-    with pytest.raises(meta.exceptions.EmtpyCommand):
+    with pytest.raises(meta.exceptions.EmptyCommand):
         meta.shell.execute("")
 
 
