@@ -8,3 +8,7 @@
 
 class UnsupportedOS(Exception):
     """Raised if attempted on an unknown operating system."""
+
+
+class EmtpyCommand(Exception):
+    """Raised if attempted to run a blank "" command."""
