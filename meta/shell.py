@@ -5,17 +5,20 @@
 
 """Functions for accessing and interacting with the system's shell."""
 
+import logging
 import platform
 import shlex
 import subprocess
 import sys
 
-from meta.exceptions import UnsupportedOS, EmptyCommand
+from meta.exceptions import EmptyCommand, UnsupportedOS
 
 
 def execute(command, silent=True):
     """Runs the passed shell command based on the operating system and returns the
     output."""
+
+    logging.info("Shell requested to execute: %s", command)
 
     # check that the command isn't an empty string
     if command == "":
@@ -30,13 +33,12 @@ def execute(command, silent=True):
     else:
         raise UnsupportedOS
 
-    # TODO: check if better way to handle stderr?
     cmd_process = subprocess.Popen(
         args,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-        bufsize=1,
+        stderr=subprocess.STDOUT,
+        universal_newlines=False,
+        bufsize=-1,
     )
 
     # handle command output as it occurs

@@ -102,3 +102,43 @@ def test_valid_execute_silent_output_default(popen_mock_command):
         meta.shell.execute("test command")
 
     output.compare("")
+
+
+def test_execute_output_with_nonewline(popen_mock_command):
+    """Ensure that if no newline printed on the last line, it still displays.
+
+    This is particularly important for programs, such as pacman, that might prompt for input."""
+    popen_mock_command("test command", stdout=b"first line\nsecond line", returncode=0)
+
+    with OutputCapture() as output:
+        meta.shell.execute("test command", silent=False)
+
+    output.compare("first line\nsecond line")
+
+
+def test_execute_stderr_in_stdout(popen_mock_command):
+    """Ensure that stderr is also printed out along with stdout.
+
+    NOTE: unsure if this is a good practice/desired functionality or not.
+    Some programs (such as pacman) output prompts and things to stderr, so
+    those don't show up unless handled."""
+    popen_mock_command(
+        "test command",
+        stdout=b"normal output\n",
+        stderr=b"things happened",
+        returncode=0,
+    )
+
+    with OutputCapture() as output:
+        meta.shell.execute("test command", silent=False)
+
+    output.compare("normal output\nthings happened")
+
+
+def test_nonmocked_shell_execute():
+    """Ensure that running an actual command on the actual shell works."""
+
+    with OutputCapture() as output:
+        meta.shell.execute('echo "hello world"', silent=False)
+
+    output.compare("hello world")
