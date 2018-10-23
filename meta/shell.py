@@ -17,8 +17,7 @@ from meta.exceptions import EmptyCommand, UnsupportedOS
 def execute(command, silent=True):
     """Runs the passed shell command based on the operating system and returns the
     output."""
-
-    logging.info("Shell requested to execute: %s", command)
+    logging.info("Shell requested to execute:%s", command)
 
     # check that the command isn't an empty string
     if command == "":
@@ -32,6 +31,7 @@ def execute(command, silent=True):
         args = shlex.split(command)
     else:
         raise UnsupportedOS
+    logging.debug("Args:%s", str(args))
 
     cmd_process = subprocess.Popen(
         args,
@@ -42,7 +42,6 @@ def execute(command, silent=True):
     )
 
     # handle command output as it occurs
-    # TODO: incorporate into logging
     output = ""
     with cmd_process.stdout:
         for character in iter(lambda: cmd_process.stdout.read(1).decode("utf-8"), ""):
@@ -51,6 +50,7 @@ def execute(command, silent=True):
             if not silent:
                 sys.stdout.write(character)
                 sys.stdout.flush()
+    logging.debug("<<<OUTPUT>>>%s<<</OUTPUT>>>", repr(output))
 
     # check for problems with the execution
     if cmd_process.wait() != 0:
