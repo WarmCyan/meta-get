@@ -5,19 +5,19 @@
 
 """Test set to ensure the core interface to the OS's shell is functional."""
 
+# pylint:disable=redefined-outer-name
+# pylint:disable=unused-import
+
 import subprocess
 
-# import unittest.mock
 import pytest
 import testfixtures
 import testfixtures.popen
-from pytest_mock import mocker
 from testfixtures.outputcapture import OutputCapture
+from pytest_mock import mocker
 
 import meta.exceptions
 import meta.shell
-
-# pylint:disable=redefined-outer-name
 
 # --------------------------------------
 #   Fixtures

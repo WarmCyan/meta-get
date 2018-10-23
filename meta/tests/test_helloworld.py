@@ -5,9 +5,12 @@
 
 """A sample testing set for the helloworld class."""
 
+# pylint:disable=redefined-outer-name
+
 import pytest
 
 from meta.helloworld import HelloWorld
+
 
 # --------------------------------------
 #   Fixtures
