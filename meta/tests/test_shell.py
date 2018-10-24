@@ -13,8 +13,8 @@ import subprocess
 import pytest
 import testfixtures
 import testfixtures.popen
-from testfixtures.outputcapture import OutputCapture
 from pytest_mock import mocker
+from testfixtures.outputcapture import OutputCapture
 
 import meta.exceptions
 import meta.shell
@@ -137,7 +137,6 @@ def test_execute_stderr_in_stdout(popen_mock_command):
 
 def test_nonmocked_shell_execute():
     """Ensure that running an actual command on the actual shell works."""
-
     with OutputCapture() as output:
         meta.shell.execute('echo "hello world"', silent=False)
 

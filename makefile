@@ -5,6 +5,7 @@ help:
 	@echo "    make tests        runs the testing suite"
 	@echo "    make docs         generate the documentation pages (html)"
 	@echo "    make opendocs     opens the documentation pages in a browser (utilizes xdg-open)"
+	@echo "    make clean        deletes any .pyc files"
 
 lint:
 	pylint meta/*
@@ -18,4 +19,8 @@ docs:
 opendocs: docs
 	@cd docs/build/html; xdg-open index.html
 
-.PHONY: help, tests, docs, opendocs, lint
+clean:
+	-rm meta/*.pyc
+	-rm meta/tests/*.pyc
+
+.PHONY: help, tests, docs, opendocs, lint, clean

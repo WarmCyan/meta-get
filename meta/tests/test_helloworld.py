@@ -11,7 +11,6 @@ import pytest
 
 from meta.helloworld import HelloWorld
 
-
 # --------------------------------------
 #   Fixtures
 # --------------------------------------
