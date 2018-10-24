@@ -1,0 +1,7 @@
+pytest~=3.9.1
+pytest-mock~=1.10.0
+testfixtures~=6.3.0
+sphinx~=1.8.1
+sphinx_rtd_theme~=0.4.2
+pylint~=2.1.1
+black==18.9b0
