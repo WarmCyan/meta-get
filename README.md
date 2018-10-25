@@ -16,7 +16,7 @@ propagated to any other systems you use.
 
 ## Status
 
-This project is still under development and is not yet in a usable state.
+This project is still in early development and is not yet in a usable state.
 
 ## Basic Features (eventually)
 
@@ -33,7 +33,7 @@ that allow you to:
 	chocolatey, pip, etc.)
 	* Execute shell scripts/commands
 * Optionally automatically remove a meta package's installed files and packages,
-instead of (or in addition to) having to manually
+instead of (or in addition to) having to manually remove them
 * Ability to draw from multiple sets (repositories) of meta-packages
 * Commands to quickly open/edit a meta-package and sync it with its git
 repository
@@ -48,6 +48,6 @@ doc](https://github.com/WildfireXIII/meta-get/blob/master/CONTRIBUTING.rst).
 
 ## Links
 
-[Github repo](https://github.com/WildfireXIII/meta-get)
-[Trello board](https://trello.com/b/G42dO29h)
+[Github repo](https://github.com/WildfireXIII/meta-get)  
+[Trello board](https://trello.com/b/G42dO29h)  
 [Design doc](https://docs.google.com/document/d/1F8nmGumkkPaMFxNUKbDfSeaOZaNSd6m-kj-Yj7I-QT8)

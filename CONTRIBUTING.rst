@@ -36,9 +36,8 @@ I personally use `pylint <https://www.pylint.org/>`_ and `black
 <https://github.com/ambv/black>`_. You can use both of these by running ``make 
 lint`` and ``make fix`` respectively in the project root directory.  
 
-Any new files added should maintain an appropriate header, ex:
+Any new files added should maintain an appropriate header, ex::
 
-.. code:: python
     # meta.shell.py
 
     # Copyright (C) 2018 Nathan Martindale <nathanamartindale@gmail.com>
@@ -68,7 +67,7 @@ I have come to appreciate nicely formatted git commit messages! The format I'm
 using is described `here <https://chris.beams.io/posts/git-commit/>`_.
 
 Ideas of Things To Contribute
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 I'm keeping a pseudo kanban board for this project over on `trello 
 <https://trello.com/b/G42dO29h>`_. Any of the cards in the upcoming version 
