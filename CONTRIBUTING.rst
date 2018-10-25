@@ -3,14 +3,14 @@ Contributing to Meta-Get
 ========================
 
 I personally believe that a tool such as this one has the potential to be very 
-useful, and ideally to more people than just me! My goal is for Meta-Get to NOT 
+useful, and ideally to more people than just me. My goal is for Meta-Get to NOT 
 be 'Nathan's esoteric package manager', and instead end up as a utility that at 
 least *some* other developers actually genuinely find useful. To this end, this 
 is an open source project, and I welcome other people to help contribute to the 
 project's development and design!
 
 I've never really run a project where my goal is to get other people 
-contributing, so please bear with me as I figure out how best to handle things! 
+contributing, so please bear with me as I figure out how best to handle things.
 
 If anyone has any questions, suggestions, or comments, you're free to shoot me 
 an email at nathanamartindale@gmail.com.
@@ -36,7 +36,9 @@ I personally use `pylint <https://www.pylint.org/>`_ and `black
 <https://github.com/ambv/black>`_. You can use both of these by running ``make 
 lint`` and ``make fix`` respectively in the project root directory.  
 
-Any new files added should maintain an appropriate header, ex::
+Any new files added should maintain an appropriate header, ex:
+
+.. code:: python
     # meta.shell.py
 
     # Copyright (C) 2018 Nathan Martindale <nathanamartindale@gmail.com>
