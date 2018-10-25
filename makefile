@@ -2,6 +2,7 @@
 help:
 	@echo "possible make commands:"
 	@echo "    make lint         runs the various python linters"
+	@echo "    make fix          runs black autofixer"
 	@echo "    make tests        runs the testing suite"
 	@echo "    make docs         generate the documentation pages (html)"
 	@echo "    make opendocs     opens the documentation pages in a browser (utilizes xdg-open)"
@@ -10,10 +11,13 @@ help:
 lint:
 	pylint meta/*
 
+fix:
+	black meta/*
+
 tests:
 	pytest meta/tests
 
-docs:
+docs: FORCE
 	@cd docs; make html
 
 opendocs: docs
@@ -23,4 +27,6 @@ clean:
 	-rm meta/*.pyc
 	-rm meta/tests/*.pyc
 
-.PHONY: help, tests, docs, opendocs, lint, clean
+FORCE:
+	
+.PHONY: help, tests, docs, opendocs, lint, clean, fix
