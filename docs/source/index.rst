@@ -11,7 +11,10 @@ Welcome to Meta-Get's documentation!
    :caption: Contents:
    :titlesonly:
 
+    API <./api.rst>
+    
     Internal <./internal.rst>
+    
 
 
 Indices and tables
