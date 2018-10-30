@@ -12,8 +12,8 @@ Welcome to Meta-Get's documentation!
    :titlesonly:
 
     API <./api.rst>
-    
     Internal <./internal.rst>
+    Changelog <./changelog.rst>
     
 
 

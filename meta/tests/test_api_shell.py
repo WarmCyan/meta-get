@@ -7,6 +7,7 @@
 
 # pylint:disable=redefined-outer-name
 # pylint:disable=unused-import
+# pylint:disable=unused-argument
 
 import pytest
 from pytest_mock import mocker
