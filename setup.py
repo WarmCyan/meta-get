@@ -14,7 +14,7 @@ setup(
     author_email="nathanamartindale@gmail",
     description="a meta package manager",
     license="GPLv3",
-    packages=["meta"],
+    packages=["meta", "meta.api"],
     setup_requires=["pytest-runner"],
     tests_require=["pytest", "testfixtures", "pytest-mock"],
 )
