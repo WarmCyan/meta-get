@@ -20,6 +20,18 @@ def install(command, silent=False):
     return output
 
 
+def uninstall(command, silent=False):
+    """Executes the passed command as a pip uninstall
+
+    :param str command: The string of packages to uninstall
+    :param bool silent: Whether to supress the console output of the command or not.
+    :returns: A string of everything written to stdout and stderr by the shell
+    """
+
+    output = __execute("uninstall %s" % command, silent=silent)
+    return output
+
+
 def __execute(command, silent=False):
     """Executes the passed command in the system's shell.
 
