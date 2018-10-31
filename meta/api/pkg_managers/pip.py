@@ -32,13 +32,14 @@ def uninstall(command, silent=False):
     return output
 
 
-def __execute(command, silent=False):
+def __execute(command, version="", silent=False):
     """Executes the passed command in the system's shell.
 
     :param str command: The string command to execute.
+    :param str version: The version of pip executable being used (e.g. 2, 3, 3.4, etc.)
     :param bool silent: Whether to supress the console output of the command or not.
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    output = meta.shell.execute("pip %s" % command, silent=silent)
+    output = meta.shell.execute("pip%s %s" % (version, command), silent=silent)
     return output

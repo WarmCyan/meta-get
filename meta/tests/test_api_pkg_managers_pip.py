@@ -42,6 +42,12 @@ def test_silent_command_execution(shell_mock):
     shell_mock.assert_called_with("pip freeze", silent=True)
 
 
+def test_execute_with_different_pip(shell_mock):
+    """Ensure that the specified version of pip gets called correctly"""
+    meta.api.pkg_managers.pip.__execute("freeze", version="3")
+    shell_mock.assert_called_with("pip3 freeze", silent=False)
+
+
 def test_command_execution_return(shell_mock):
     """Ensure that the shell output gets returned correctly."""
     assert meta.api.pkg_managers.pip.__execute("freeze") == "executed"
