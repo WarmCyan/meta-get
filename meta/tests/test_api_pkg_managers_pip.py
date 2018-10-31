@@ -65,6 +65,12 @@ def test_silent_install(shell_mock):
     shell_mock.assert_called_with("pip install numpy", silent=True)
 
 
+def test_install_command_with_different_pip(shell_mock):
+    """Ensure that specified pip version gets called correctly."""
+    meta.api.pkg_managers.pip.install("numpy", version="2.7")
+    shell_mock.assert_called_with("pip2.7 install numpy", silent=False)
+
+
 def test_uninstall_command(shell_mock):
     """Ensure that the uninstall command gets passed correctly to the underlying shell function."""
     meta.api.pkg_managers.pip.uninstall("numpy")
@@ -75,3 +81,9 @@ def test_silent_uninstall(shell_mock):
     """Ensure that the uninstall command, if called silently gets passed correctly to the underlying shell function."""
     meta.api.pkg_managers.pip.uninstall("numpy", silent=True)
     shell_mock.assert_called_with("pip uninstall numpy", silent=True)
+
+
+def test_uninstall_command_with_different_pip(shell_mock):
+    """Ensure that specified pip version gets called correctly."""
+    meta.api.pkg_managers.pip.uninstall("numpy", version="3.5")
+    shell_mock.assert_called_with("pip3.5 uninstall numpy", silent=False)

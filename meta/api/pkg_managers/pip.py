@@ -8,7 +8,7 @@
 import meta.shell
 
 
-def install(command, silent=False):
+def install(command, version="", silent=False):
     """Executes the passed command as a pip install
 
     :param str command: The string of packages to install
@@ -16,11 +16,11 @@ def install(command, silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    output = __execute("install %s" % command, silent=silent)
+    output = __execute("install %s" % command, version=version, silent=silent)
     return output
 
 
-def uninstall(command, silent=False):
+def uninstall(command, version="", silent=False):
     """Executes the passed command as a pip uninstall
 
     :param str command: The string of packages to uninstall
@@ -28,7 +28,7 @@ def uninstall(command, silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    output = __execute("uninstall %s" % command, silent=silent)
+    output = __execute("uninstall %s" % command, version=version, silent=silent)
     return output
 
 
