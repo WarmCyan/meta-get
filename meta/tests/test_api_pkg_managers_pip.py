@@ -56,20 +56,27 @@ def test_command_execution_return(shell_mock):
 def test_install_command(shell_mock):
     """Ensure that the install command gets passed correctly to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy")
-    shell_mock.assert_called_with("pip install numpy", silent=False)
+    shell_mock.assert_called_with("pip install numpy --user", silent=False)
 
 
 def test_silent_install(shell_mock):
     """Ensure that the install command, if called silently gets passed correctly
     to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy", silent=True)
-    shell_mock.assert_called_with("pip install numpy", silent=True)
+    shell_mock.assert_called_with("pip install numpy --user", silent=True)
+
+
+def test_install_as_root(shell_mock):
+    """Ensure that the install command, if called without a user_install,
+    gets passed correctly"""
+    meta.api.pkg_managers.pip.install("numpy", user_install=False)
+    shell_mock.assert_called_with("pip install numpy", silent=False)
 
 
 def test_install_different_pip(shell_mock):
     """Ensure that specified pip version gets called correctly."""
     meta.api.pkg_managers.pip.install("numpy", version="2.7")
-    shell_mock.assert_called_with("pip2.7 install numpy", silent=False)
+    shell_mock.assert_called_with("pip2.7 install numpy --user", silent=False)
 
 
 def test_uninstall_command(shell_mock):

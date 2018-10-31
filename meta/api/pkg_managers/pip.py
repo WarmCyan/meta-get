@@ -8,14 +8,18 @@
 import meta.shell
 
 
-def install(command, version="", silent=False):
+def install(command, version="", user_install=True, silent=False):
     """Executes the passed command as a pip install
 
     :param str command: The string of packages to install
     :param str version: The version of pip executable being used (e.g. 2, 3, 3.4, etc.)
+    :param bool user_install: Whether to install using the user scheme or not
     :param bool silent: Whether to supress the console output of the command or not.
     :returns: A string of everything written to stdout and stderr by the shell
     """
+
+    if user_install:
+        command = "%s --user" % command
 
     output = execute("install %s" % command, version=version, silent=silent)
     return output
