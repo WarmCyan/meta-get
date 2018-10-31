@@ -8,7 +8,19 @@
 import meta.shell
 
 
-def execute(command, silent=False):
+def install(command, silent=False):
+    """Executes the passed command as a pip install
+
+    :param str command: The string of packages to install
+    :param bool silent: Whether to supress the console output of the command or not.
+    :returns: A string of everything written to stdout and stderr by the shell
+    """
+
+    output = __execute("install %s" % command, silent=silent)
+    return output
+
+
+def __execute(command, silent=False):
     """Executes the passed command in the system's shell.
 
     :param str command: The string command to execute.

@@ -21,7 +21,7 @@ import meta.api.pkg_managers.pip
 def shell_mock(mocker):
     """Mock for the backend shell execution function."""
     execution_mock = mocker.patch("meta.shell.execute", autospec=True)
-    execution_mock.return_value = "meta-get==0.1.0"
+    execution_mock.return_value = "executed"
     return execution_mock
 
 
@@ -32,16 +32,28 @@ def shell_mock(mocker):
 
 def test_default_command_execution(shell_mock):
     """Ensure that a command gets passed correctly to the underlying shell function."""
-    meta.api.pkg_managers.pip.execute("freeze")
+    meta.api.pkg_managers.pip.__execute("freeze")
     shell_mock.assert_called_with("pip freeze", silent=False)
 
 
 def test_silent_command_execution(shell_mock):
     """Ensure that the api, if called silently, calls the backend shell silently."""
-    meta.api.pkg_managers.pip.execute("freeze", silent=True)
+    meta.api.pkg_managers.pip.__execute("freeze", silent=True)
     shell_mock.assert_called_with("pip freeze", silent=True)
 
 
 def test_command_execution_return(shell_mock):
     """Ensure that the shell output gets returned correctly."""
-    assert meta.api.pkg_managers.pip.execute("freeze") == "meta-get==0.1.0"
+    assert meta.api.pkg_managers.pip.__execute("freeze") == "executed"
+
+
+def test_install_command(shell_mock):
+    """Ensure that the install command gets passed correctly to the underlying shell function."""
+    meta.api.pkg_managers.pip.install("numpy")
+    shell_mock.assert_called_with("pip install numpy", silent=False)
+
+
+def test_silent_install(shell_mock):
+    """Ensure that the install command, if called silently gets passed correctly to the underlying shell function."""
+    meta.api.pkg_managers.pip.install("numpy", silent=True)
+    shell_mock.assert_called_with("pip install numpy", silent=True)
