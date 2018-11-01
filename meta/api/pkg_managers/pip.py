@@ -24,9 +24,9 @@ def install(command, version="", user_install=True, silent=False):
                  .format(command, version, user_install))
 
     if user_install:
-        command = "%s --user" % command
+        command = "{0} --user".format(command)
 
-    output = execute("install %s" % command, version=version, silent=silent)
+    output = execute("install {0}".format(command), version=version, silent=silent)
     return output
 
 
@@ -42,7 +42,7 @@ def uninstall(command, version="", silent=False):
     logging.info("PIP API accessed with command uninstall {0}, pip version {1}"
                  .format(command, version))
 
-    output = execute("uninstall %s" % command, version=version, silent=silent)
+    output = execute("uninstall {0}".format(command), version=version, silent=silent)
     return output
 
 
@@ -55,5 +55,5 @@ def execute(command, version="", silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    output = meta.shell.execute("pip%s %s" % (version, command), silent=silent)
+    output = meta.shell.execute("pip{0} {1}".format(version, command), silent=silent)
     return output
