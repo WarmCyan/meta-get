@@ -1,6 +1,10 @@
 language: python
 matrix:
   include:
+    - python: 3.6
+      env: TOXENV=lint
+    - python: 3.6
+      env: TOXENV=format
     - python: 3.4
       env: TOXENV=py34
     - python: 3.5
