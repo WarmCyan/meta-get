@@ -5,6 +5,8 @@
 
 """API for accessing pip functionality."""
 
+import logging
+
 import meta.shell
 
 
@@ -17,6 +19,9 @@ def install(command, version="", user_install=True, silent=False):
     :param bool silent: Whether to supress the console output of the command or not.
     :returns: A string of everything written to stdout and stderr by the shell
     """
+
+    logging.info("PIP API accessed with command install {0}, pip version {1}, user_install {2}"
+                 .format(command, version, user_install))
 
     if user_install:
         command = "%s --user" % command
@@ -33,6 +38,9 @@ def uninstall(command, version="", silent=False):
     :param bool silent: Whether to supress the console output of the command or not.
     :returns: A string of everything written to stdout and stderr by the shell
     """
+
+    logging.info("PIP API accessed with command uninstall {0}, pip version {1}"
+                 .format(command, version))
 
     output = execute("uninstall %s" % command, version=version, silent=silent)
     return output
