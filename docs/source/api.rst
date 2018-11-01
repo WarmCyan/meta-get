@@ -8,3 +8,10 @@ shell
 -----
 .. automodule:: meta.api.shell
 .. autofunction:: execute
+
+pip
+-----
+.. automodule:: meta.api.pkg_managers.pip
+.. autofunction:: install
+.. autofunction:: uninstall
+.. autofunction:: execute
