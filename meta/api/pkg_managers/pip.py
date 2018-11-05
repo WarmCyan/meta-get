@@ -20,8 +20,12 @@ def install(command, version="", user_install=True, silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    logging.info("PIP API accessed with command install %s, pip version %s, user_install %s",
-                 command, version, user_install)
+    logging.info(
+        "PIP API accessed with command install %s, pip version %s, user_install %s",
+        command,
+        version,
+        user_install,
+    )
 
     if user_install:
         command = "{0} --user".format(command)
@@ -39,7 +43,9 @@ def uninstall(command, version="", silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    logging.info("PIP API accessed with command uninstall %s, pip version %s", command, version)
+    logging.info(
+        "PIP API accessed with command uninstall %s, pip version %s", command, version
+    )
 
     output = execute("uninstall {0}".format(command), version=version, silent=silent)
     return output
