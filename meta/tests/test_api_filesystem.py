@@ -9,6 +9,8 @@
 # pylint:disable=unused-import
 # pylint:disable=unused-argument
 
+import os
+
 import pytest
 from pytest_mock import mocker
 
@@ -28,6 +30,20 @@ def shell_mock(mocker):
     return execution_mock
 
 
+@pytest.fixture
+def abspath_file_mock(mocker):
+    """Mock for the absolute path converter."""
+    path_mock = mocker.patch("os.path.abspath", autospec=True)
+    path_mock.return_value = "/path/to/myfile.txt"
+
+
+@pytest.fixture
+def abspath_folder_mock(mocker):
+    """Mock for the absolute path converter."""
+    path_mock = mocker.patch("os.path.abspath", autospec=True)
+    path_mock.return_value = "/path/to/myfolder"
+
+
 # --------------------------------------
 #   Tests
 # --------------------------------------
@@ -40,40 +56,40 @@ def test_default_command_execution(shell_mock):
 
 
 @pytest.mark.parametrize(
-    "given_path, expected_name, expected_path",
+    "given_path",
     [
-        ("./myfile", "myfile", "./myfile"),
-        ("/myfile", "myfile", "/myfile"),
-        ("/path/to/myfile", "myfile", "/path/to/myfile"),
-        ("path/to/myfile", "myfile", "./path/to/myfile"),
-        ("myfile", "myfile", "./myfile"),
-        ("myfile.txt", "myfile.txt.", "./myfile.txt"),
+        ("./myfile.txt"),
+        ("/myfile.txt"),
+        ("/path/to/myfile.txt"),
+        ("path/to/myfile.txt"),
+        ("myfile.txt"),
+        ("myfile.txt"),
     ],
 )
-def test_file_path_initialization(given_path, expected_name, expected_path):
+def test_file_path_initialization(abspath_file_mock, given_path):
     """Ensure that file path and name are correctly assigned based on the given path."""
     test_file = filesystem.File(given_path)
-    assert test_file.path == expected_path
-    assert test_file.name == expected_name
+    assert test_file.path == "/path/to/myfile.txt"
+    assert test_file.name == "myfile.txt"
 
 
 @pytest.mark.parametrize(
-    "given_path, expected_name, expected_path",
+    "given_path",
     [
-        ("./myfolder", "myfolder", "./myfolder"),
-        ("./myfolder/", "myfolder", "./myfolder"),
-        ("/myfolder", "myfolder", "/myfolder"),
-        ("/myfolder/", "myfolder", "/myfolder"),
-        ("/path/to/myfolder", "myfolder", "/path/to/myfolder"),
-        ("/path/to/myfolder/", "myfolder", "/path/to/myfolder"),
-        ("path/to/myfolder", "myfolder", "./path/to/myfolder"),
-        ("path/to/myfolder/", "myfolder", "./path/to/myfolder"),
-        ("myfolder", "myfolder", "./myfolder"),
-        ("myfolder/", "myfolder", "./myfolder"),
+        ("./myfolder"),
+        ("./myfolder/"),
+        ("/myfolder"),
+        ("/myfolder/"),
+        ("/path/to/myfolder"),
+        ("/path/to/myfolder/"),
+        ("path/to/myfolder"),
+        ("path/to/myfolder/"),
+        ("myfolder"),
+        ("myfolder/"),
     ],
 )
-def test_folder_path_initialization(given_path, expected_name, expected_path):
+def test_folder_path_initialization(abspath_folder_mock, given_path):
     """Ensure that the folder path and name are correctly assigned."""
     test_folder = filesystem.Folder(given_path)
-    assert test_folder.path == expected_path
-    assert test_folder.name == expected_name
+    assert test_folder.path == "/path/to/myfolder"
+    assert test_folder.name == "myfolder"
