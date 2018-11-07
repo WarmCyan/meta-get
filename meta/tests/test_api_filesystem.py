@@ -31,17 +31,14 @@ def shell_mock(mocker):
 
 
 @pytest.fixture
-def abspath_file_mock(mocker):
+def abspath_mock(mocker):
     """Mock for the absolute path converter."""
     path_mock = mocker.patch("os.path.abspath", autospec=True)
-    path_mock.return_value = "/path/to/myfile.txt"
 
+    def should_return(actual_abs_path):
+        path_mock.return_value = actual_abs_path
 
-@pytest.fixture
-def abspath_folder_mock(mocker):
-    """Mock for the absolute path converter."""
-    path_mock = mocker.patch("os.path.abspath", autospec=True)
-    path_mock.return_value = "/path/to/myfolder"
+    return should_return
 
 
 # --------------------------------------
@@ -49,47 +46,45 @@ def abspath_folder_mock(mocker):
 # --------------------------------------
 
 
-def test_default_command_execution(shell_mock):
-    """Ensure that a command gets passed correctly to the underlying shell function."""
-    meta.api.shell.execute("echo 'hello world'")
-    shell_mock.assert_called_with("echo 'hello world'", silent=False)
-
-
+# NOTE: most tests assuming the actual file "myfile.txt" is located at "/path/to/"
 @pytest.mark.parametrize(
-    "given_path",
+    "given_path, actual_path",
     [
-        ("./myfile.txt"),
-        ("/myfile.txt"),
-        ("/path/to/myfile.txt"),
-        ("path/to/myfile.txt"),
-        ("myfile.txt"),
-        ("myfile.txt"),
+        ("./myfile.txt", "/path/to/myfile.txt"),
+        ("/myfile.txt", "/myfile.txt"),
+        ("/path/to/myfile.txt", "/path/to/myfile.txt"),
+        ("subpath/to/myfile.txt", "/path/to/subpath/to/myfile.txt"),
+        ("./subpath/to/myfile.txt", "/path/to/subpath/to/myfile.txt"),
+        ("myfile.txt", "/path/to/myfile.txt"),
     ],
 )
-def test_file_path_initialization(abspath_file_mock, given_path):
+def test_file_path_initialization(abspath_mock, given_path, actual_path):
     """Ensure that file path and name are correctly assigned based on the given path."""
+    abspath_mock(actual_path)
     test_file = filesystem.File(given_path)
-    assert test_file.path == "/path/to/myfile.txt"
+    assert test_file.path == actual_path
     assert test_file.name == "myfile.txt"
 
 
+# NOTE: most tests assuming the actual folder "myfolder" is located at "/path/to/"
 @pytest.mark.parametrize(
-    "given_path",
+    "given_path, actual_path",
     [
-        ("./myfolder"),
-        ("./myfolder/"),
-        ("/myfolder"),
-        ("/myfolder/"),
-        ("/path/to/myfolder"),
-        ("/path/to/myfolder/"),
-        ("path/to/myfolder"),
-        ("path/to/myfolder/"),
-        ("myfolder"),
-        ("myfolder/"),
+        ("./myfolder", "/path/to/myfolder"),
+        ("./myfolder/", "/path/to/myfolder"),
+        ("/myfolder", "/path/to/myfolder"),
+        ("/myfolder/", "/path/to/myfolder"),
+        ("/path/to/myfolder", "/path/to/myfolder"),
+        ("/path/to/myfolder/", "/path/to/myfolder"),
+        ("subpath/to/myfolder", "/path/to/subpath/to/myfolder"),
+        ("subpath/to/myfolder/", "/path/to/subpath/to/myfolder"),
+        ("myfolder", "/path/to/myfolder"),
+        ("myfolder/", "/path/to/myfolder"),
     ],
 )
-def test_folder_path_initialization(abspath_folder_mock, given_path):
+def test_folder_path_initialization(abspath_folder_mock, given_path, actual_path):
     """Ensure that the folder path and name are correctly assigned."""
+    abspath_mock(actual_path)
     test_folder = filesystem.Folder(given_path)
-    assert test_folder.path == "/path/to/myfolder"
+    assert test_folder.path == actual_path
     assert test_folder.name == "myfolder"
