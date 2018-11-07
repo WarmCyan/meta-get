@@ -15,23 +15,6 @@ from pytest_mock import mocker
 import meta.api.shell
 import meta.shell
 
-# --------------------------------------
-#   Fixtures
-# --------------------------------------
-
-
-@pytest.fixture
-def shell_mock(mocker):
-    """Mock for the backend shell execution function."""
-    execution_mock = mocker.patch("meta.shell.execute", autospec=True)
-    execution_mock.return_value = "hello world"
-    return execution_mock
-
-
-# --------------------------------------
-#   Tests
-# --------------------------------------
-
 
 def test_default_command_execution(shell_mock):
     """Ensure that a command gets passed correctly to the underlying shell function."""

@@ -8,26 +8,7 @@
 # pylint:disable=redefined-outer-name
 # pylint:disable=unused-argument
 
-import pytest
-
 import meta.api.pkg_managers.pip
-
-# --------------------------------------
-#   Fixtures
-# --------------------------------------
-
-
-@pytest.fixture
-def shell_mock(mocker):
-    """Mock for the backend shell execution function."""
-    execution_mock = mocker.patch("meta.shell.execute", autospec=True)
-    execution_mock.return_value = "executed"
-    return execution_mock
-
-
-# --------------------------------------
-#   Tests
-# --------------------------------------
 
 
 def test_default_command_execution(shell_mock):
@@ -50,7 +31,7 @@ def test_execute_with_different_pip(shell_mock):
 
 def test_command_execution_return(shell_mock):
     """Ensure that the shell output gets returned correctly."""
-    assert meta.api.pkg_managers.pip.execute("freeze") == "executed"
+    assert meta.api.pkg_managers.pip.execute("freeze") == "hello world"
 
 
 def test_install_command(shell_mock):

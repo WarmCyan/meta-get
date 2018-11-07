@@ -23,14 +23,6 @@ from meta.api import filesystem
 
 
 @pytest.fixture
-def shell_mock(mocker):
-    """Mock for the backend shell execution function."""
-    execution_mock = mocker.patch("meta.shell.execute", autospec=True)
-    execution_mock.return_value = "hello world"
-    return execution_mock
-
-
-@pytest.fixture
 def abspath_mock(mocker):
     """Mock for the absolute path converter."""
     path_mock = mocker.patch("os.path.abspath", autospec=True)
@@ -82,7 +74,7 @@ def test_file_path_initialization(abspath_mock, given_path, actual_path):
         ("myfolder/", "/path/to/myfolder"),
     ],
 )
-def test_folder_path_initialization(abspath_folder_mock, given_path, actual_path):
+def test_folder_path_initialization(abspath_mock, given_path, actual_path):
     """Ensure that the folder path and name are correctly assigned."""
     abspath_mock(actual_path)
     test_folder = filesystem.Folder(given_path)
