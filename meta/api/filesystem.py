@@ -44,6 +44,6 @@ class File(_FileUnit):
         """Removes this folder from the file system."""
         pass
 
-    def copy(self):
+    def copy(self, dest_path):
         """Makes and returns a copy of this file at the designated location."""
         pass

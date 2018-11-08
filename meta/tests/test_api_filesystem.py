@@ -11,11 +11,10 @@
 
 import os
 
-import pytest
-from pytest_mock import mocker
-
 import meta.shell
+import pytest
 from meta.api import filesystem
+from pytest_mock import mocker
 
 # --------------------------------------
 #   Fixtures
@@ -31,6 +30,13 @@ def abspath_mock(mocker):
         path_mock.return_value = actual_abs_path
 
     return should_return
+
+
+@pytest.fixture
+def basic_file(abspath_mock):
+    """A simple file example."""
+    abspath_mock("/path/to/myfile.txt")
+    return filesystem.File("/path/to/myfile.txt")
 
 
 # --------------------------------------
@@ -80,3 +86,43 @@ def test_folder_path_initialization(abspath_mock, given_path, actual_path):
     test_folder = filesystem.Folder(given_path)
     assert test_folder.path == actual_path
     assert test_folder.name == "myfolder"
+
+
+def test_file_deletion(basic_file, shell_mock):
+    """Ensure that deleting a file calls the correct shell command."""
+    basic_file.delete()
+    shell_mock.assert_called_with("rm " + "/path/to/myfile.txt")
+
+
+COPY_FILE_TEST_PARAMS = [
+    ("../", "/path/myfile.txt", "myfile.txt"),
+    ("newfile.txt", "/path/to/newfile.txt", "newfile.txt"),
+    ("./newfile.txt", "/path/to/newfile.txt", "newfile.txt"),
+    ("../newfile.txt", "/path/newfile.txt", "newfile.txt"),
+    ("subpath/to/myfile.txt", "/path/to/subpath/to/myfile.txt", "myfile.txt"),
+    ("./subpath/to/myfile.txt", "/path/to/subpath/to/myfile.txt", "myfile.txt"),
+    ("subpath/to/", "/path/to/subpath/to/myfile.txt", "myfile.txt"),
+]
+
+
+@pytest.mark.parametrize(
+    "passed_dest, expected_dest_path, expected_dest_name", COPY_FILE_TEST_PARAMS
+)
+def test_file_copy(
+    basic_file, shell_mock, passed_dest, expected_dest_path, expected_dest_name
+):
+    """Ensure that copying a file calls the correct shell command."""
+    basic_file.copy(passed_dest)
+    shell_mock.assert_called_with("cp /path/to/myfile.txt " + expected_dest_path)
+
+
+@pytest.mark.parametrize(
+    "passed_dest, expected_dest_path, expected_dest_name", COPY_FILE_TEST_PARAMS
+)
+def test_file_copy_return(
+    basic_file, passed_dest, expected_dest_path, expected_dest_name
+):
+    """Ensure that copying a file returns a file object pointing to the new file."""
+    new_file = basic_file.copy(passed_dest)
+    assert new_file.path == expected_dest_path
+    assert new_file.name == expected_dest_name
