@@ -6,13 +6,14 @@
 """API for managing files and folders."""
 
 import logging
-import platform
 import os
+import platform
 
 import meta.shell
 
 # NOTE: probably want to use shutil or os for some of these
 
+# NOTE: all self.paths are ASSUMED to exist, so no fancy manual path resolution will be necessary
 
 # NOTE: maybe this becomes File, and Folder just inherits from File?
 class _FileUnit:
@@ -20,15 +21,15 @@ class _FileUnit:
 
     def __init__(self, path):
         self.name = ""
-        self.path = path
+        self.path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
 
     def move(self, dest_path):
-        """Moves the file unit to the passed location.
+        """Moves the file to the passed location.
 
-        :param str dest_path: The destination path to move this file unit to.
+        :param str dest_path: The destination path to move this file to.
         """
 
-        logging.info("Requested move of fileunit '%s' to '%s'", self.path, dest_path)
+        logging.info("Requested move of file '%s' to '%s'", self.path, dest_path)
 
         # determine command based on OS
         cmd_word = ""
@@ -38,11 +39,25 @@ class _FileUnit:
             cmd_word = "move"
 
         # resolve if a relative path
-        resolved_path = os.path.abspath(dest_path)
-        logging.debug("Path '%s' resolved to '%s'", dest_path, resolved_path)
+        resolved_path = self.resolve_path(dest_path)
 
         # execute the movement shell command
         meta.shell.execute("{0} {1} {2}".format(cmd_word, self.path, resolved_path))
+
+    def resolve_path(self, unresolved_path):
+        """Handles fixing any relative paths.
+
+        (all ./ and ../ will be based off of this file's directory, rather than the actual "cwd")
+
+        :param str unresolved_path: The path to be resolved
+        """
+
+        resolved = ""
+        with os.chdir(self.path):
+            resolved = os.path.abspath(os.path.expanduser(os.path.expandvars(unresolved_path)))
+
+        logging.debug("Resolving path '%s' to '%s'", unresolved_path, resolved)
+        return resolved
 
 
 class Folder(_FileUnit):

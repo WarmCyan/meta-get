@@ -19,6 +19,7 @@ def execute(command, silent=False):
     :param bool silent: Whether to suppress the console output of the command or not.
     :returns: A string of everything written to stdout and stderr by the shell.
     """
+    
     logging.info("Shell API accessed with command:%s", command)
 
     output = meta.shell.execute(command, silent=silent)
