@@ -26,23 +26,23 @@ class _FileUnit:
     def move(self, dest_path):
         """Moves the file to the passed location.
 
-        :param str dest_path: The destination path to move this file to.
+        :param str dest_path: The destination path to move this file to
         """
 
         logging.info("Requested move of file '%s' to '%s'", self.path, dest_path)
 
-        cmd_word = ""
         # determine command based on OS
+        cmd = ""
         if platform.system() == "Linux":
-            cmd_word = "mv"
+            cmd = "mv"
         elif platform.system() == "Windows":
-            cmd_word = "move"
+            cmd = "move"
 
         # resolve if a relative path
         resolved_path = self.resolve_path(dest_path)
 
         # execute the movement shell command
-        meta.shell.execute("{0} {1} {2}".format(cmd_word, self.path, resolved_path))
+        meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
 
     def resolve_path(self, unresolved_path):
         """Handles fixing any relative paths.
@@ -54,7 +54,9 @@ class _FileUnit:
 
         resolved = ""
         with os.chdir(self.path):
-            resolved = os.path.abspath(os.path.expanduser(os.path.expandvars(unresolved_path)))
+            resolved = os.path.abspath(
+                os.path.expanduser(os.path.expandvars(unresolved_path))
+            )
 
         logging.debug("Resolving path '%s' to '%s'", unresolved_path, resolved)
         return resolved
@@ -72,15 +74,41 @@ class Folder(_FileUnit):
 
         logging.info("Requested removal of folder '%s'", self.path)
 
-        # run command based off of OS
+        # determine command based on OS
+        cmd = ""
         if platform.system() == "Linux":
-            meta.shell.execute("rm -rfd {0}".format(self.path))
+            cmd = "rm -rfd"
         elif platform.system() == "Windows":
-            meta.shell.execute("del /S /Q {0}".format(self.path))
+            cmd = "del /S /Q"
+
+        # execute the command
+        meta.shell.execute("{0} {1}".format(cmd, self.path))
 
     def copy(self, dest_path):
-        """Makes and returns a copy of this folder at the designated location."""
-        pass
+        """Makes and returns a copy of this folder at the designated location.
+
+        :param str dest_path: The destination path to copy this folder to
+        :returns: a Folder pointing to the newly copied instance
+        """
+
+        logging.info("Request copy of folder '%s' at '%s'", self.path, dest_path)
+
+        # resolve if a relative path
+        resolved_path = self.resolve_path(dest_path)
+
+        # determine command based on OS
+        cmd = ""
+        if platform.system() == "Linux":
+            cmd = "cp -R"
+        elif platform.system() == "Windows":
+            cmd = "robocopy /copyall /e"
+
+        # execute the command
+        meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
+
+        # return an instance of the new copy
+        new_copy = Folder(resolved_path)
+        return new_copy
 
 
 class File(_FileUnit):
@@ -91,16 +119,37 @@ class File(_FileUnit):
 
         logging.info("Requested removal of file '%s'", self.path)
 
-        cmd_word = ""
         # determine command based on OS
+        cmd = ""
         if platform.system() == "Linux":
-            cmd_word = "rm"
+            cmd = "rm"
         elif platform.system() == "Windows":
-            cmd_word = "del"
+            cmd = "del"
 
         # execute the command
-        meta.shell.execute("{0} {1}".format(cmd_word, self.path))
+        meta.shell.execute("{0} {1}".format(cmd, self.path))
 
     def copy(self, dest_path):
-        """Makes and returns a copy of this file at the designated location."""
-        pass
+        """Makes and returns a copy of this file at the designated location.
+
+        :param str dest_path: The destination path to copy this file to
+        :returns: a File pointing to the newly copied instance
+        """
+
+        logging.info("Request copy of file '%s' at '%s'", self.path, dest_path)
+
+        # resolve if a relative path
+        resolved_path = self.resolve_path(dest_path)
+
+        # determine command based on OS
+        cmd = ""
+        if platform.system() == "Linux":
+            cmd = "cp"
+        elif platform.system() == "Windows":
+            cmd = "copy"
+
+        meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
+
+        # return an instance of the new copy
+        new_copy = File(resolved_path)
+        return new_copy

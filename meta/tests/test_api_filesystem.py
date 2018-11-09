@@ -173,7 +173,9 @@ def test_folder_copy_return(
 @pytest.mark.parametrize(
     "passed_dest, expected_dest_path", [i[0:2] for i in COPY_FOLDER_TEST_PARAMS]
 )
-def test_folder_move(abspath_mock, shell_mock, basic_folder, passed_dest, expected_dest_path):
+def test_folder_move(
+    abspath_mock, shell_mock, basic_folder, passed_dest, expected_dest_path
+):
     """Ensure moving a folder results in the correct shell command."""
     abspath_mock(expected_dest_path)
     basic_folder.move(passed_dest)

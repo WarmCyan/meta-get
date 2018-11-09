@@ -16,7 +16,7 @@ def install(command, version="", user_install=True, silent=False):
     :param str command: The string of packages to install
     :param str version: The version of pip executable being used (e.g. 2, 3, 3.4, etc.)
     :param bool user_install: Whether to install using the user scheme or not
-    :param bool silent: Whether to supress the console output of the command or not.
+    :param bool silent: Whether to supress the console output of the command or not
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
@@ -39,7 +39,7 @@ def uninstall(command, version="", silent=False):
 
     :param str command: The string of packages to uninstall
     :param str version: The version of pip executable being used (e.g. 2, 3, 3.4, etc.)
-    :param bool silent: Whether to supress the console output of the command or not.
+    :param bool silent: Whether to supress the console output of the command or not
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
@@ -56,7 +56,7 @@ def execute(command, version="", silent=False):
 
     :param str command: The string command to execute.
     :param str version: The version of pip executable being used (e.g. 2, 3, 3.4, etc.)
-    :param bool silent: Whether to supress the console output of the command or not.
+    :param bool silent: Whether to supress the console output of the command or not
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
