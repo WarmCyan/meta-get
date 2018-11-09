@@ -31,8 +31,8 @@ class _FileUnit:
 
         logging.info("Requested move of file '%s' to '%s'", self.path, dest_path)
 
-        # determine command based on OS
         cmd_word = ""
+        # determine command based on OS
         if platform.system() == "Linux":
             cmd_word = "mv"
         elif platform.system() == "Windows":
@@ -69,7 +69,14 @@ class Folder(_FileUnit):
 
     def delete(self):
         """Removes this folder from the file system."""
-        pass
+
+        logging.info("Requested removal of folder '%s'", self.path)
+
+        # run command based off of OS
+        if platform.system() == "Linux":
+            meta.shell.execute("rm -rfd {0}".format(self.path))
+        elif platform.system() == "Windows":
+            meta.shell.execute("del /S /Q {0}".format(self.path))
 
     def copy(self, dest_path):
         """Makes and returns a copy of this folder at the designated location."""
@@ -80,8 +87,19 @@ class File(_FileUnit):
     """A file unit that contains data."""
 
     def delete(self):
-        """Removes this folder from the file system."""
-        pass
+        """Removes this file from the file system."""
+
+        logging.info("Requested removal of file '%s'", self.path)
+
+        cmd_word = ""
+        # determine command based on OS
+        if platform.system() == "Linux":
+            cmd_word = "rm"
+        elif platform.system() == "Windows":
+            cmd_word = "del"
+
+        # execute the command
+        meta.shell.execute("{0} {1}".format(cmd_word, self.path))
 
     def copy(self, dest_path):
         """Makes and returns a copy of this file at the designated location."""
