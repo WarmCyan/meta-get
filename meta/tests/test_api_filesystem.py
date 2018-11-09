@@ -155,7 +155,7 @@ def test_folder_copy(
 ):
     """Ensure that copying a folder calls the correct shell command."""
     basic_folder.copy(passed_dest)
-    shell_mock.assert_called_with("cp /path/to/myfolder " + expected_dest_path)
+    shell_mock.assert_called_with("cp -R /path/to/myfolder " + expected_dest_path)
 
 
 @pytest.mark.parametrize(
@@ -168,3 +168,13 @@ def test_folder_copy_return(
     new_folder = basic_folder.copy(passed_dest)
     assert new_folder.path == expected_dest_path
     assert new_folder.name == expected_dest_name
+
+
+@pytest.mark.parametrize(
+    "passed_dest, expected_dest_path", [i[0:2] for i in COPY_FOLDER_TEST_PARAMS]
+)
+def test_folder_move(abspath_mock, shell_mock, basic_folder, passed_dest, expected_dest_path):
+    """Ensure moving a folder results in the correct shell command."""
+    abspath_mock(expected_dest_path)
+    basic_folder.move(passed_dest)
+    shell_mock.assert_called_with("mv /path/to/myfolder " + expected_dest_path)
