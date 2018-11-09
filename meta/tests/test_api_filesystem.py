@@ -11,10 +11,11 @@
 
 import os
 
-import meta.shell
 import pytest
-from meta.api import filesystem
 from pytest_mock import mocker
+
+import meta.shell
+from meta.api import filesystem
 
 # --------------------------------------
 #   Fixtures
@@ -37,6 +38,13 @@ def basic_file(abspath_mock):
     """A simple file example."""
     abspath_mock("/path/to/myfile.txt")
     return filesystem.File("/path/to/myfile.txt")
+
+
+@pytest.fixture
+def basic_folder(abspath_mock):
+    """A simple folder example."""
+    abspath_mock("/path/to/myfolder")
+    return filesystem.Folder("/path/to/myfolder")
 
 
 # --------------------------------------
@@ -126,3 +134,37 @@ def test_file_copy_return(
     new_file = basic_file.copy(passed_dest)
     assert new_file.path == expected_dest_path
     assert new_file.name == expected_dest_name
+
+
+COPY_FOLDER_TEST_PARAMS = [
+    ("../", "/path/myfolder", "myfolder"),
+    ("newfolder", "/path/to/newfolder", "newfolder"),
+    ("./newfolder", "/path/to/newfolder", "newfolder"),
+    ("../newfolder", "/path/newfolder", "newfolder"),
+    ("subpath/to/myfolder", "/path/to/subpath/to/myfolder", "myfolder"),
+    ("./subpath/to/myfolder", "/path/to/subpath/to/myfolder", "myfolder"),
+    ("subpath/to/", "/path/to/subpath/to/myfolder", "myfolder"),
+]
+
+
+@pytest.mark.parametrize(
+    "passed_dest, expected_dest_path, expected_dest_name", COPY_FOLDER_TEST_PARAMS
+)
+def test_folder_copy(
+    basic_folder, shell_mock, passed_dest, expected_dest_path, expected_dest_name
+):
+    """Ensure that copying a folder calls the correct shell command."""
+    basic_folder.copy(passed_dest)
+    shell_mock.assert_called_with("cp /path/to/myfolder " + expected_dest_path)
+
+
+@pytest.mark.parametrize(
+    "passed_dest, expected_dest_path, expected_dest_name", COPY_FOLDER_TEST_PARAMS
+)
+def test_folder_copy_return(
+    basic_folder, passed_dest, expected_dest_path, expected_dest_name
+):
+    """Ensure that copying a folder returns a folder object pointing to the new folder."""
+    new_folder = basic_folder.copy(passed_dest)
+    assert new_folder.path == expected_dest_path
+    assert new_folder.name == expected_dest_name
