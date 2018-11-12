@@ -20,8 +20,8 @@ class _FileUnit:
     """A parent class for Folder and File that contains common logic."""
 
     def __init__(self, path):
-        self.name = ""
         self.path = os.path.abspath(os.path.expanduser(os.path.expandvars(path)))
+        self.name = os.path.basename(self.path)
 
     def move(self, dest_path):
         """Moves the file to the passed location.
@@ -68,6 +68,15 @@ class Folder(_FileUnit):
     def __init__(self, path):
         super().__init__(path)
         self.contents = {}
+
+        # get all of the files and subfolders within this folder
+        for subpath in os.listdir(path):
+            if os.path.isdir(subpath):
+                subfolder = Folder(subpath)
+                self.contents[subfolder.name] = subfolder
+            else:
+                subfile = File(subpath)
+                self.contents[subfile.name] = subfile
 
     def delete(self):
         """Removes this folder from the file system."""
