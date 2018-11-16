@@ -15,7 +15,5 @@ matrix:
       env: TOXENV=py37
       dist: xenial
       sudo: true
-    - python: pypy
-      env: TOXENV=pypy
 install: pip install tox
 script: tox
