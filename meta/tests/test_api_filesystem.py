@@ -11,11 +11,10 @@
 
 import os
 
-import pytest
-from pytest_mock import mocker
-
 import meta.shell
+import pytest
 from meta.api import filesystem
+from pytest_mock import mocker
 
 # --------------------------------------
 #   Fixtures
@@ -42,6 +41,13 @@ def listdir_blank_mock(mocker):
 
 
 @pytest.fixture
+def chdir_mock(mocker):
+    """Mock to avoid changing to a non-existant directory."""
+    dir_mock = mocker.patch("os.chdir", autospec=True)
+    return dir_mock
+
+
+@pytest.fixture
 def basic_file(abspath_mock):
     """A simple file example."""
     abspath_mock("/path/to/myfile.txt")
@@ -49,7 +55,7 @@ def basic_file(abspath_mock):
 
 
 @pytest.fixture
-def basic_folder(abspath_mock):
+def basic_folder(abspath_mock, listdir_blank_mock):
     """A simple folder example."""
     abspath_mock("/path/to/myfolder")
     return filesystem.Folder("/path/to/myfolder")
@@ -125,7 +131,7 @@ COPY_FILE_TEST_PARAMS = [
     "passed_dest, expected_dest_path, expected_dest_name", COPY_FILE_TEST_PARAMS
 )
 def test_file_copy(
-    basic_file, shell_mock, passed_dest, expected_dest_path, expected_dest_name
+    basic_file, chdir_mock, shell_mock, passed_dest, expected_dest_path, expected_dest_name
 ):
     """Ensure that copying a file calls the correct shell command."""
     basic_file.copy(passed_dest)
@@ -136,7 +142,7 @@ def test_file_copy(
     "passed_dest, expected_dest_path, expected_dest_name", COPY_FILE_TEST_PARAMS
 )
 def test_file_copy_return(
-    basic_file, passed_dest, expected_dest_path, expected_dest_name
+    basic_file, chdir_mock, passed_dest, expected_dest_path, expected_dest_name
 ):
     """Ensure that copying a file returns a file object pointing to the new file."""
     new_file = basic_file.copy(passed_dest)
@@ -159,7 +165,7 @@ COPY_FOLDER_TEST_PARAMS = [
     "passed_dest, expected_dest_path, expected_dest_name", COPY_FOLDER_TEST_PARAMS
 )
 def test_folder_copy(
-    basic_folder, shell_mock, passed_dest, expected_dest_path, expected_dest_name
+    basic_folder, chdir_mock, shell_mock, passed_dest, expected_dest_path, expected_dest_name
 ):
     """Ensure that copying a folder calls the correct shell command."""
     basic_folder.copy(passed_dest)
@@ -170,7 +176,7 @@ def test_folder_copy(
     "passed_dest, expected_dest_path, expected_dest_name", COPY_FOLDER_TEST_PARAMS
 )
 def test_folder_copy_return(
-    basic_folder, passed_dest, expected_dest_path, expected_dest_name
+    basic_folder, chdir_mock, passed_dest, expected_dest_path, expected_dest_name
 ):
     """Ensure that copying a folder returns a folder object pointing to the new folder."""
     new_folder = basic_folder.copy(passed_dest)
@@ -182,7 +188,7 @@ def test_folder_copy_return(
     "passed_dest, expected_dest_path", [i[0:2] for i in COPY_FOLDER_TEST_PARAMS]
 )
 def test_folder_move(
-    abspath_mock, shell_mock, basic_folder, passed_dest, expected_dest_path
+    abspath_mock, chdir_mock, shell_mock, basic_folder, passed_dest, expected_dest_path
 ):
     """Ensure moving a folder results in the correct shell command."""
     abspath_mock(expected_dest_path)
