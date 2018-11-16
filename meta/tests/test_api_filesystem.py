@@ -34,6 +34,14 @@ def abspath_mock(mocker):
 
 
 @pytest.fixture
+def listdir_blank_mock(mocker):
+    """Mock for os.listdir, returning just a blank array."""
+    listdir_mock = mocker.patch("os.listdir", autospec=True)
+    listdir_mock.return_value = []
+    return listdir_mock
+
+
+@pytest.fixture
 def basic_file(abspath_mock):
     """A simple file example."""
     abspath_mock("/path/to/myfile.txt")
@@ -88,7 +96,7 @@ def test_file_path_initialization(abspath_mock, given_path, actual_path):
         ("myfolder/", "/path/to/myfolder"),
     ],
 )
-def test_folder_path_initialization(abspath_mock, given_path, actual_path):
+def test_folder_path_initialization(abspath_mock, listdir_blank_mock, given_path, actual_path):
     """Ensure that the folder path and name are correctly assigned."""
     abspath_mock(actual_path)
     test_folder = filesystem.Folder(given_path)
