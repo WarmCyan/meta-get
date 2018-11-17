@@ -12,3 +12,7 @@ class UnsupportedOS(Exception):
 
 class EmptyCommand(Exception):
     """Raised if attempted to run a blank "" command."""
+
+
+class RelativePathUnwise(Exception):
+    """Raised if a relative path used where one doesn't make sense."""
