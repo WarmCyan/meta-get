@@ -16,6 +16,8 @@ from meta.exceptions import RelativePathUnwise
 
 # NOTE: all self.paths are ASSUMED to exist, so no fancy manual path resolution will be necessary
 
+# NOTE: should path be the path WITHOUT the name? (at least for files?)
+
 # NOTE: maybe this becomes File, and Folder just inherits from File?
 class _FileUnit:
     """A parent class for Folder and File that contains common logic."""
@@ -172,16 +174,16 @@ def create_folder(path, force=False):
 
     # ensure this isn't a relative path (unless user specified force)
     if path[0] != "/" and path[0] != "~" and path[0] != "%" and path[0] != "$":
+        # pylint:disable=line-too-long
         if force:
-            # pylint:disable=line-too-long
             logging.warning(
                 "Forcing creation of a relative folder '%s'. This is unwise as the resolved path of this will likely depend on where on your system you are running this command",
                 str(path),
             )
-            # pylint:enable=line-too-long
         else:
             raise RelativePathUnwise("Relative path specified for folder creation. This is unwise as it can have inconsistent results depending on where the command is run."
             )
+        # pylint:enable=line-too-long
 
     # determine command based on OS
     cmd = ""

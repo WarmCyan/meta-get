@@ -228,9 +228,6 @@ def test_folder_move(
     shell_mock.assert_called_with("mv /path/to/myfolder " + expected_dest_path)
 
 
-# TODO: don't allow creation called with ../ or ./ (first character must be a / or ~)
-
-
 def test_folder_creation(abspath_mock, listdir_blank_mock, shell_mock):
     """Ensure creating a folder calls the correct shell command."""
     abspath_mock("/path/to/folder")
@@ -269,5 +266,45 @@ def test_forced_relative_folder_creation_passes(
 
     try:
         filesystem.create_folder(path, force=True)
+    except meta.exceptions.RelativePathUnwise:
+        pytest.fail("Unexpected RelativePathUnwise")
+
+
+def test_file_creation(abspath_mock, shell_mock):
+    """Ensure creating a file calls the correct shell command."""
+    abspath_mock("/path/to/file.txt")
+    filesystem.create_file("/path/to/file.txt")
+    shell_mock.assert_called_with("mkdir /path/to/file.txt")
+
+
+def test_file_creation_return(abspath_mock, shell_mock):
+    """Ensure that creating a file returns a file object with the correct path."""
+    abspath_mock("/path/to/file.txt")
+    new_file = filesystem.create_file("/path/to/file.txt")
+    assert new_file.path == "/path/to/file.txt"
+    assert new_file.name == "file.txt"
+
+
+@pytest.mark.parametrize(
+    "path", ["../path/to/file.txt.", "path/to/file.txt", "./path/to/file.txt"]
+)
+def test_relative_file_creation_throws(abspath_mock, path):
+    """Ensure that trying to create a file with a relative path throws an exception by
+    default."""
+    with pytest.raises(meta.exceptions.RelativePathUnwise):
+        filesystem.create_file(path)
+
+
+@pytest.mark.parametrize(
+    "path", ["../path/to/file.txt", "path/to/file.txt", "./path/to/file.txt"]
+)
+def test_forced_relative_file_creation_passes(abspath_mock, shell_mock, path):
+    """Ensure that someone who forces relative path doesn't get an exception."""
+    # NOTE: abspath_mock path doesn't actually matter, since force functionality causes
+    # inconsistency anyway
+    abspath_mock("/path/to/file.txt")
+
+    try:
+        filesystem.create_file(path, force=True)
     except meta.exceptions.RelativePathUnwise:
         pytest.fail("Unexpected RelativePathUnwise")
