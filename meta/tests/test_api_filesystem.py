@@ -231,14 +231,16 @@ def test_folder_move(
 # TODO: don't allow creation called with ../ or ./ (first character must be a / or ~)
 
 
-def test_folder_creation(abspath_mock, shell_mock):
+def test_folder_creation(abspath_mock, listdir_blank_mock, shell_mock):
     """Ensure creating a folder calls the correct shell command."""
-    new_folder = filesystem.create_folder("/path/to/folder")
+    abspath_mock("/path/to/folder")
+    filesystem.create_folder("/path/to/folder")
     shell_mock.assert_called_with("mkdir /path/to/folder")
 
 
-def test_folder_creation_return(abspath_mock, shell_mock):
+def test_folder_creation_return(abspath_mock, listdir_blank_mock, shell_mock):
     """Ensure that creating a folder returns a Folder object with the correct path."""
+    abspath_mock("/path/to/folder")
     new_folder = filesystem.create_folder("/path/to/folder")
     assert new_folder.path == "/path/to/folder"
     assert new_folder.name == "folder"
@@ -257,8 +259,14 @@ def test_relative_folder_creation_throws(abspath_mock, path):
 @pytest.mark.parametrize(
     "path", ["../path/to/folder", "path/to/folder", "./path/to/folder"]
 )
-def test_forced_relative_folder_creation_passes(abspath_mock, path):
+def test_forced_relative_folder_creation_passes(
+    abspath_mock, listdir_blank_mock, shell_mock, path
+):
     """Ensure that someone who forces relative path doesn't get an exception."""
+    # NOTE: abspath_mock path doesn't actually matter, since force functionality causes
+    # inconsistency anyway
+    abspath_mock("/path/to/folder")
+
     try:
         filesystem.create_folder(path, force=True)
     except meta.exceptions.RelativePathUnwise:

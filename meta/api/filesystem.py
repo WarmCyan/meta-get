@@ -10,6 +10,7 @@ import os
 import platform
 
 import meta.shell
+from meta.exceptions import RelativePathUnwise
 
 # NOTE: probably want to use shutil or os for some of these
 
@@ -162,3 +163,35 @@ class File(_FileUnit):
         # return an instance of the new copy
         new_copy = File(resolved_path)
         return new_copy
+
+
+def create_folder(path, force=False):
+    """Create the specified folder on the system and return a Folder instance of it."""
+
+    logging.info("Requested new folder at '%s'", path)
+
+    # ensure this isn't a relative path (unless user specified force)
+    if path[0] != "/" and path[0] != "~" and path[0] != "%" and path[0] != "$":
+        if force:
+            # pylint:disable=line-too-long
+            logging.warning(
+                "Forcing creation of a relative folder '%s'. This is unwise as the resolved path of this will likely depend on where on your system you are running this command",
+                str(path),
+            )
+            # pylint:enable=line-too-long
+        else:
+            raise RelativePathUnwise("Relative path specified for folder creation. This is unwise as it can have inconsistent results depending on where the command is run."
+            )
+
+    # determine command based on OS
+    cmd = ""
+    if platform.system() == "Linux":
+        cmd = "mkdir"
+    elif platform.system() == "Windows":
+        cmd = "md"
+
+    meta.shell.execute("{0} {1}".format(cmd, path))
+
+    # make and return a Folder instance pointing to it
+    new_folder = Folder(path)
+    return new_folder
