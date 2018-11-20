@@ -16,9 +16,9 @@ from meta.exceptions import RelativePathUnwise
 
 # NOTE: all self.paths are ASSUMED to exist, so no fancy manual path resolution will be necessary
 
-# NOTE: should path be the path WITHOUT the name? (at least for files?)
+# NOTE: should constructor throw an error on relative path as well?
 
-# NOTE: maybe this becomes File, and Folder just inherits from File?
+# NOTE: should path be the path WITHOUT the name? (at least for files?)
 class _FileUnit:
     """A parent class for Folder and File that contains common logic."""
 
@@ -49,7 +49,6 @@ class _FileUnit:
 
     def resolve_path(self, unresolved_path):
         """Handles fixing any relative paths.
-
         (all ./ and ../ will be based off of this file's directory, rather than the actual "cwd")
 
         :param str unresolved_path: The path to be resolved
@@ -66,7 +65,11 @@ class _FileUnit:
 
 
 class Folder(_FileUnit):
-    """A file unit that contains other folders and files."""
+    """This class is a reference to a folder on the system.
+    Initializing an instance of this object assumes that the path given already exists.
+
+    :param str path: The path to an existing folder.
+    """
 
     def __init__(self, path):
         super().__init__(path)
@@ -101,7 +104,7 @@ class Folder(_FileUnit):
         """Makes and returns a copy of this folder at the designated location.
 
         :param str dest_path: The destination path to copy this folder to
-        :returns: a Folder pointing to the newly copied instance
+        :returns: A ``Folder`` pointing to the newly copied instance
         """
 
         logging.info("Request copy of folder '%s' at '%s'", self.path, dest_path)
@@ -125,7 +128,11 @@ class Folder(_FileUnit):
 
 
 class File(_FileUnit):
-    """A file unit that contains data."""
+    """This class is a reference to a file on the system.
+    Initializing an instance of this object assumes that the path given already exists.
+
+    :param str path: The path to an existing file.
+    """
 
     def delete(self):
         """Removes this file from the file system."""
@@ -146,7 +153,7 @@ class File(_FileUnit):
         """Makes and returns a copy of this file at the designated location.
 
         :param str dest_path: The destination path to copy this file to
-        :returns: a File pointing to the newly copied instance
+        :returns: A ``File`` object pointing to the newly copied instance
         """
 
         logging.info("Request copy of file '%s' at '%s'", self.path, dest_path)
@@ -169,7 +176,7 @@ class File(_FileUnit):
 
 
 def _check_relative_path(path, force=False):
-    """Check whether the path is relative or not, and warn/error accordingly."""
+    """Checks whether the path is relative or not, and warn/error accordingly."""
     if path[0] != "/" and path[0] != "~" and path[0] != "%" and path[0] != "$":
         # pylint:disable=line-too-long
         if force:
@@ -185,7 +192,15 @@ def _check_relative_path(path, force=False):
 
 
 def create_folder(path, force=False):
-    """Create the specified folder on the system and return a Folder instance of it."""
+    """Creates the specified folder on the system and returns a ``Folder`` instance of it.
+
+    :param str path: The desired path/name of the new folder.
+    :param bool force: Force the creation of a folder given a relative path.
+    :returns: A ``Folder`` object with the designated path.
+
+    .. note::
+        when ``force`` is ``False``, this function raises a ``RelativePathUnwise`` exception
+    """
 
     logging.info("Requested new folder at '%s'", path)
 
@@ -207,7 +222,14 @@ def create_folder(path, force=False):
 
 
 def create_file(path, force=False):
-    """Create the file on the system and return a File instance of it."""
+    """Creates the file on the system and returns a ``File`` instance of it.
+    :param str path: The desired path/name of the new file.
+    :param bool force: Force the creation of a file given a relative path.
+    :returns: A ``File`` object with the designated path.
+
+    .. note::
+        when ``force`` is ``False``, this function raises a ``RelativePathUnwise`` exception
+    """
 
     logging.info("Requested new file at '%s'", path)
 
