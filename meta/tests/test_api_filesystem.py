@@ -274,7 +274,7 @@ def test_file_creation(abspath_mock, shell_mock):
     """Ensure creating a file calls the correct shell command."""
     abspath_mock("/path/to/file.txt")
     filesystem.create_file("/path/to/file.txt")
-    shell_mock.assert_called_with("mkdir /path/to/file.txt")
+    shell_mock.assert_called_with("touch /path/to/file.txt")
 
 
 def test_file_creation_return(abspath_mock, shell_mock):

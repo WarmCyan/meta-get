@@ -167,23 +167,29 @@ class File(_FileUnit):
         return new_copy
 
 
+def _check_relative_path(path, force=False):
+    """Check whether the path is relative or not, and warn/error accordingly."""
+    if path[0] != "/" and path[0] != "~" and path[0] != "%" and path[0] != "$":
+        # pylint:disable=line-too-long
+        if force:
+            logging.warning(
+                "Forcing creation of relative path '%s'. This is unwise as the resolved path of this will likely depend on where on your system you are running this command",
+                str(path),
+            )
+        else:
+            raise RelativePathUnwise(
+                "Relative path specified for file creation. This is unwise as it can have inconsistent results depending on where the command is run."
+            )
+        # pylint:enable=line-too-long
+
+
 def create_folder(path, force=False):
     """Create the specified folder on the system and return a Folder instance of it."""
 
     logging.info("Requested new folder at '%s'", path)
 
     # ensure this isn't a relative path (unless user specified force)
-    if path[0] != "/" and path[0] != "~" and path[0] != "%" and path[0] != "$":
-        # pylint:disable=line-too-long
-        if force:
-            logging.warning(
-                "Forcing creation of a relative folder '%s'. This is unwise as the resolved path of this will likely depend on where on your system you are running this command",
-                str(path),
-            )
-        else:
-            raise RelativePathUnwise("Relative path specified for folder creation. This is unwise as it can have inconsistent results depending on where the command is run."
-            )
-        # pylint:enable=line-too-long
+    _check_relative_path(path, force)
 
     # determine command based on OS
     cmd = ""
@@ -197,3 +203,26 @@ def create_folder(path, force=False):
     # make and return a Folder instance pointing to it
     new_folder = Folder(path)
     return new_folder
+
+
+def create_file(path, force=False):
+    """Create the file on the system and return a File instance of it."""
+
+    logging.info("Requested new file at '%s'", path)
+
+    # ensure this isn't a relative path (unless user specified force)
+    _check_relative_path(path, force)
+
+    # determine command based on OS
+    cmd = ""
+    if platform.system() == "Linux":
+        cmd = "touch"
+    elif platform.system() == "Windows":
+        # https://stackoverflow.com/questions/210201/how-to-create-empty-text-file-from-a-batch-file
+        cmd = "copy NUL"
+
+    meta.shell.execute("{0} {1}".format(cmd, path))
+
+    # make and return a File instance pointing to it
+    new_file = File(path)
+    return new_file
