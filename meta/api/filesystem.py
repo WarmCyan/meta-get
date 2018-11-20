@@ -74,11 +74,12 @@ class Folder(_FileUnit):
 
         # get all of the files and subfolders within this folder
         for subpath in os.listdir(path):
-            if os.path.isdir(subpath):
-                subfolder = Folder(subpath)
+            full_sub_path = "{0}/{1}".format(path, subpath)
+            if os.path.isdir(full_sub_path):
+                subfolder = Folder(full_sub_path)
                 self.contents[subfolder.name] = subfolder
             else:
-                subfile = File(subpath)
+                subfile = File(full_sub_path)
                 self.contents[subfile.name] = subfile
 
     def delete(self):
