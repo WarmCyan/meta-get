@@ -16,3 +16,7 @@ class EmptyCommand(Exception):
 
 class RelativePathUnwise(Exception):
     """Raised if a relative path used where one doesn't make sense."""
+
+
+class InvalidAutotrackerFile(Exception):
+    """Raised if a key (files, packages, dependencies) not found in the json of a given file."""
