@@ -35,9 +35,8 @@ class Autotracker:
             "dependencies": self.dependencies,
         }
 
-        # TODO: individual file for each meta package, need to figure out where these would be
-        # stored
-        filename = "autotracker.json"
+        # NOTE: directory still needs to be determined
+        filename = "{0}_{1}.json".format(self.database, self.package_name)
         with open(filename, "w") as autotracker_file:
             json.dump(autotracker_info, autotracker_file)
 
@@ -52,9 +51,8 @@ class Autotracker:
         self.database = database
         self.package_name = package_name
 
-        # TODO: individual file for each meta package, need to figure out where these would be
-        # stored
-        filename = "autotracker.json"
+        # NOTE: directory still needs to be determined
+        filename = "{0}_{1}.json".format(self.database, self.package_name)
         with open(filename) as autotracker_file:
             autotracker_info = json.load(autotracker_file)
 
