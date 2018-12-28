@@ -5,6 +5,11 @@ API
 This module contains pre-defined functionality that can be utilized inside of
 meta-package setup scripts.
 
+autotracker
+###########
+.. automodule:: meta.api.autotracker
+.. autofunction:: suppress
+
 filesystem
 ##########
 .. automodule:: meta.api.filesystem

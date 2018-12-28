@@ -15,11 +15,19 @@ class Autotracker:
     """A class that contains all autotracker information for a specific package."""
 
     def __init__(self):
+        #: The name of the package database of the meta package this autotracker tracks.
         self.database = ""
+
+        #: The name of the meta package that this autotracker tracks.
         self.package_name = ""
 
+        #: The array of filepaths that are associated with the installation of this meta package.
         self.files = []
+
+        #: The dictionary of package information for each package that this meta package installed.
         self.packages = []
+
+        #: The array of other meta packages that this meta package installs as dependencies
         self.dependencies = []
 
     def save(self):
