@@ -12,6 +12,8 @@
 import meta.config
 from meta.api import autotracker
 
+
 def test_suppress_disables_autotracker():
+    """Ensure that calling suppress on the autotracker disables it in the configuration."""
     autotracker.suppress()
-    assert meta.config.AUTOTRACKER_ENABLED == False
+    assert not meta.config.AUTOTRACKER_ENABLED
