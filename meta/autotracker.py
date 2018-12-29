@@ -31,9 +31,36 @@ class Autotracker:
         #: The array of other meta packages that this meta package installs as dependencies
         self.dependencies = []
 
+    def change_filepath(self, old_path, new_path):
+        """Change the given path in the autotracker's file list to a new given path."""
+        for i in range(0, len(self.files)):
+            if self.files[i] == old_path:
+                self.files[i] = new_path
+
+    def check_file(self, path):
+        """Check if the given file is in the autotracker's file list."""
+        if path in self.files:
+            return True
+        return False
+
+    def check_package(self, package_manager, package_name):
+        """Check if the given package is in the autotracker's package list."""
+        for package in self.packages:
+            if (
+                package["pkg_manager"] == package_manager
+                and package["name"] == package_name
+            ):
+                return True
+        return False
+
+    def check_dependency(self, package_name):
+        """Check if the given meta package is in the autotracker's dependency list."""
+        if package_name in self.dependencies:
+            return True
+        return False
+
     def save(self):
         """Save the autotracker information to a file based on database and package name."""
-
         logging.info(
             "Saving autotracker information for %s:%s", self.database, self.package_name
         )
@@ -53,7 +80,6 @@ class Autotracker:
     def load(self, database, package_name):
         """Load the autotracker information from the file for the given database and package
         name."""
-
         logging.info(
             "Loading autotracker information for %s:%s", database, package_name
         )
