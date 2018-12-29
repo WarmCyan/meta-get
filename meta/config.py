@@ -5,4 +5,8 @@
 
 """Settings and configuration handling for CLI and program functionality."""
 
+#: Whether the autotracker is enabled or not
 AUTOTRACKER_ENABLED = True
+
+#: Where autotracker information is stored by default
+AUTOTRACKER_DIR = ""

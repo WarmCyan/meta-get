@@ -8,6 +8,7 @@
 import json
 import logging
 
+from meta import config
 from meta.exceptions import InvalidAutotrackerFile
 
 
@@ -43,9 +44,10 @@ class Autotracker:
             "dependencies": self.dependencies,
         }
 
-        # NOTE: directory still needs to be determined
+        # NOTE: path might still need to be expanded?
         filename = "{0}_{1}.json".format(self.database, self.package_name)
-        with open(filename, "w") as autotracker_file:
+        filepath = config.AUTOTRACKER_DIR + filename
+        with open(filepath, "w") as autotracker_file:
             json.dump(autotracker_info, autotracker_file)
 
     def load(self, database, package_name):
@@ -59,9 +61,10 @@ class Autotracker:
         self.database = database
         self.package_name = package_name
 
-        # NOTE: directory still needs to be determined
+        # NOTE: path might still need to be expanded?
         filename = "{0}_{1}.json".format(self.database, self.package_name)
-        with open(filename) as autotracker_file:
+        filepath = config.AUTOTRACKER_DIR + filename
+        with open(filepath) as autotracker_file:
             autotracker_info = json.load(autotracker_file)
 
             # check for valid autotracker file
