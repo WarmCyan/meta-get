@@ -18,10 +18,13 @@ def test_install_single(shell_mock, common_autotracker):
     shell_mock.assert_called_with("sudo pacman -S testpackage", silent=False)
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pacman", "testpackage")
 
+
 def test_install_multiple(shell_mock, common_autotracker):
     """Ensure the correct command is used for installing a package list."""
     meta.api.pkg_managers.pacman.install("testpackage1", "testpackage2")
-    shell_mock.assert_called_with("sudo pacman -S testpackage1 testpackage2", silent=False)
+    shell_mock.assert_called_with(
+        "sudo pacman -S testpackage1 testpackage2", silent=False
+    )
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pacman", "testpackage1")
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pacman", "testpackage2")
 

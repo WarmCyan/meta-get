@@ -15,6 +15,7 @@ from pytest_mock import mocker
 import meta.autotracker
 import meta.current
 
+
 @pytest.fixture
 def shell_mock(mocker):
     """Basic mock for the backend shell execution function.

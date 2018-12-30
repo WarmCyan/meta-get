@@ -5,12 +5,12 @@ API
 This module contains pre-defined functionality that can be utilized inside of
 meta-package setup scripts.
 
-autotracker
+Autotracker
 ###########
 .. automodule:: meta.api.autotracker
 .. autofunction:: suppress
 
-filesystem
+Filesystem
 ##########
 .. automodule:: meta.api.filesystem
 
@@ -29,14 +29,19 @@ File
     :members:
     :inherited-members:
 
-pip
+Pacman
+######
+.. automodule:: meta.api.pkg_managers.pacman
+.. autofunction:: install
+.. autofunction:: uninstall
+
+Pip
 ###
 .. automodule:: meta.api.pkg_managers.pip
 .. autofunction:: install
 .. autofunction:: uninstall
-.. autofunction:: execute
 
-shell
+Shell
 #####
 .. automodule:: meta.api.shell
 .. autofunction:: execute
