@@ -5,7 +5,7 @@
 
 """Module-wide instance information for the current CLI command.
 
-NOTE: Unsure if this is the best place for this information, so it may end up moving at some 
+NOTE: Unsure if this is the best place for this information, so it may end up moving at some
 point."""
 
 PACKAGE_AUTOTRACKER = None

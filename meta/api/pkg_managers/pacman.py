@@ -7,9 +7,22 @@
 
 import logging
 
+import meta.shell
 
 def install(*pkgs, silent=False):
     """Installs the given packages with the `pacman -S` command."""
 
+    pkg_list = " ".join(pkgs)
+    logging.info("Pacman API requested to install packages %s", pkg_list)
+
+    output = meta.shell.execute("sudo pacman -S {0}".format(pkg_list), silent=silent)
+    return output
+
+
 def uninstall(pkg, silent=False):
     """Installs the given package with the `pacman -R` command."""
+
+    logging.info("Pacman API request to uninstall package %s", pkg)
+
+    output = meta.shell.execute("sudo pacman -R {0}".format(pkg), silent=silent)
+    return output
