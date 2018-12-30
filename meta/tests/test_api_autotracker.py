@@ -9,8 +9,6 @@
 # pylint:disable=unused-import
 # pylint:disable=unused-argument
 
-import pytest
-
 import meta.config
 from meta.api import autotracker
 

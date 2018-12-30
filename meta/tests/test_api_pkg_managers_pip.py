@@ -77,3 +77,9 @@ def test_uninstall_different_pip(shell_mock):
     """Ensure that specified pip version gets called correctly."""
     meta.api.pkg_managers.pip.uninstall("numpy", version="3.5")
     shell_mock.assert_called_with("pip3.5 uninstall numpy", silent=False)
+
+
+def test_install_multiple(shell_mock):
+    """Ensure that passing multiple arguments to the install function works correctly."""
+    meta.api.pkg_managers.pip.install("numpy", "pytest")
+    shell_mock.assert_called_with("pip install numpy pytest --user", silent=False)

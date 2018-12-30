@@ -14,7 +14,7 @@ import meta.shell
 def install(*pkgs, silent=False):
     """Installs the given packages with the `pacman -S` command.
 
-    :param str pkgs: String(s) of packages to install
+    :param str *pkgs: String(s) of packages to install
     :param bool silent: Whether to suppress console output of the command or not
     :returns: A string of everything written to stdout and stderr by the shell
 
