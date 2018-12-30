@@ -12,6 +12,8 @@
 import pytest
 from pytest_mock import mocker
 
+import meta.autotracker
+import meta.current
 
 @pytest.fixture
 def shell_mock(mocker):
@@ -21,3 +23,14 @@ def shell_mock(mocker):
     execution_mock = mocker.patch("meta.shell.execute", autospec=True)
     execution_mock.return_value = "hello world"
     return execution_mock
+
+
+@pytest.fixture
+def common_autotracker():
+    """Autotracker that is set as application's current autotracker.
+
+    Any autotracker changes that get made when this fixture is used should apply to this
+    instance."""
+    tracker = meta.autotracker.Autotracker()
+    meta.current.PACKAGE_AUTOTRACKER = tracker
+    return tracker

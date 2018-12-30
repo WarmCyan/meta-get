@@ -7,7 +7,9 @@
 
 import logging
 
+import meta.current
 import meta.shell
+
 
 def install(*pkgs, silent=False):
     """Installs the given packages with the `pacman -S` command."""
@@ -16,6 +18,13 @@ def install(*pkgs, silent=False):
     logging.info("Pacman API requested to install packages %s", pkg_list)
 
     output = meta.shell.execute("sudo pacman -S {0}".format(pkg_list), silent=silent)
+
+    # add to autotracker
+    for pkg in pkgs:
+        meta.current.PACKAGE_AUTOTRACKER.packages.append(
+            {"name": pkg, "pkg_manager": "pacman"}
+        )
+
     return output
 
 
