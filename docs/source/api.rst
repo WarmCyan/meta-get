@@ -5,6 +5,12 @@ API
 This module contains pre-defined functionality that can be utilized inside of
 meta-package setup scripts.
 
+Apt
+###
+.. automodule:: meta.api.pkg_managers.apt
+.. autofunction:: install
+.. autofunction:: uninstall
+
 Autotracker
 ###########
 .. automodule:: meta.api.autotracker

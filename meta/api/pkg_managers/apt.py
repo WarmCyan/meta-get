@@ -27,7 +27,7 @@ def install(*pkgs, silent=False):
     """
 
     pkg_list = " ".join(pkgs)
-    logging.info("Aptitude API requested to install packages %s", pkg_list)
+    logging.info("Apt API requested to install packages %s", pkg_list)
 
     output = meta.shell.execute("sudo apt install {0}".format(pkg_list), silent=silent)
 
@@ -48,7 +48,7 @@ def uninstall(pkg, silent=False):
     :returns: A string of everything written to stdout and stderr by the shell
     """
 
-    logging.info("Aptitude API request to uninstall package %s", pkg)
+    logging.info("Apt API request to uninstall package %s", pkg)
 
     output = meta.shell.execute("sudo apt remove {0}".format(pkg), silent=silent)
     return output

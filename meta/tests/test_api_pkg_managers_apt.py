@@ -3,7 +3,7 @@
 # Copyright (C) 2018 Nathan Martindale <nathanamartindale@gmail.com>
 # Licensed under GPL-3.0: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-"""Test set to ensure the aptitude API is working as intended."""
+"""Test set to ensure the apt API is working as intended."""
 
 # pylint:disable=redefined-outer-name
 # pylint:disable=unused-argument
