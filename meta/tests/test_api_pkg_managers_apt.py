@@ -14,7 +14,7 @@ import meta.current
 
 def test_install_single(shell_mock, common_autotracker):
     """Ensure the correct command is used for installing a single package."""
-    meta.api.pkg_managers.api.install("testpackage")
+    meta.api.pkg_managers.apt.install("testpackage")
     shell_mock.assert_called_with("sudo apt install testpackage", silent=False)
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("apt", "testpackage")
 
