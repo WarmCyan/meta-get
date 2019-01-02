@@ -9,6 +9,7 @@
 # pylint:disable=unused-argument
 
 import meta.api.pkg_managers.pip
+import meta.current
 
 
 def test_default_command_execution(shell_mock):
@@ -38,6 +39,7 @@ def test_install_command(shell_mock):
     """Ensure that the install command gets passed correctly to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy")
     shell_mock.assert_called_with("pip install numpy --user", silent=False)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
 def test_silent_install(shell_mock):
@@ -45,6 +47,7 @@ def test_silent_install(shell_mock):
     to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy", silent=True)
     shell_mock.assert_called_with("pip install numpy --user", silent=True)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
 def test_install_as_root(shell_mock):
@@ -52,12 +55,14 @@ def test_install_as_root(shell_mock):
     gets passed correctly"""
     meta.api.pkg_managers.pip.install("numpy", user_install=False)
     shell_mock.assert_called_with("pip install numpy", silent=False)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
 def test_install_different_pip(shell_mock):
     """Ensure that specified pip version gets called correctly."""
     meta.api.pkg_managers.pip.install("numpy", version="2.7")
     shell_mock.assert_called_with("pip2.7 install numpy --user", silent=False)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
 def test_uninstall_command(shell_mock):
@@ -79,7 +84,9 @@ def test_uninstall_different_pip(shell_mock):
     shell_mock.assert_called_with("pip3.5 uninstall numpy", silent=False)
 
 
-def test_install_multiple(shell_mock):
+def test_install_multiple(shell_mock, common_autotracker):
     """Ensure that passing multiple arguments to the install function works correctly."""
     meta.api.pkg_managers.pip.install("numpy", "pytest")
     shell_mock.assert_called_with("pip install numpy pytest --user", silent=False)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
+    assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "pytest")
