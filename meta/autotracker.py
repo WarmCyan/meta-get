@@ -59,6 +59,18 @@ class Autotracker:
             return True
         return False
 
+    def get_package(self, package_manager, package_name):
+        """Retrieve associated information for the given package in the autotracker's list."""
+        for package in self.packages:
+            if (
+                package["pkg_manager"] == package_manager
+                and package["name"] == package_name
+            ):
+                return package
+
+        # NOTE: should this return an error?
+        return None
+
     def save(self):
         """Save the autotracker information to a file based on database and package name."""
         logging.info(

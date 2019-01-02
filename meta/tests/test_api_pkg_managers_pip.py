@@ -35,14 +35,14 @@ def test_command_execution_return(shell_mock):
     assert meta.api.pkg_managers.pip.execute("freeze") == "hello world"
 
 
-def test_install_command(shell_mock):
+def test_install_command(shell_mock, common_autotracker):
     """Ensure that the install command gets passed correctly to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy")
     shell_mock.assert_called_with("pip install numpy --user", silent=False)
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
-def test_silent_install(shell_mock):
+def test_silent_install(shell_mock, common_autotracker):
     """Ensure that the install command, if called silently gets passed correctly
     to the underlying shell function."""
     meta.api.pkg_managers.pip.install("numpy", silent=True)
@@ -50,19 +50,22 @@ def test_silent_install(shell_mock):
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
-def test_install_as_root(shell_mock):
+def test_install_as_root(shell_mock, common_autotracker):
     """Ensure that the install command, if called without a user_install,
-    gets passed correctly"""
+    gets passed correctly."""
     meta.api.pkg_managers.pip.install("numpy", user_install=False)
     shell_mock.assert_called_with("pip install numpy", silent=False)
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
 
 
-def test_install_different_pip(shell_mock):
+def test_install_different_pip(shell_mock, common_autotracker):
     """Ensure that specified pip version gets called correctly."""
     meta.api.pkg_managers.pip.install("numpy", version="2.7")
     shell_mock.assert_called_with("pip2.7 install numpy --user", silent=False)
     assert meta.current.PACKAGE_AUTOTRACKER.check_package("pip", "numpy")
+    pkg = meta.current.PACKAGE_AUTOTRACKER.get_package("pip", "numpy")
+    assert pkg["version"] == "2.7"
+    assert pkg["user_install"]
 
 
 def test_uninstall_command(shell_mock):

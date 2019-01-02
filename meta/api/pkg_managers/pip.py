@@ -7,6 +7,7 @@
 
 import logging
 
+import meta.current
 import meta.shell
 
 
@@ -32,6 +33,18 @@ def install(*pkgs, version="", user_install=True, silent=False):
         pkg_list = "{0} --user".format(pkg_list)
 
     output = execute("install {0}".format(pkg_list), version=version, silent=silent)
+
+    # add to autotracker
+    for pkg in pkgs:
+        meta.current.PACKAGE_AUTOTRACKER.packages.append(
+            {
+                "name": pkg,
+                "pkg_manager": "pip",
+                "version": version,
+                "user_install": user_install,
+            }
+        )
+
     return output
 
 
