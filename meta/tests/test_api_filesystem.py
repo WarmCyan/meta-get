@@ -14,6 +14,7 @@ import os
 import pytest
 from pytest_mock import mocker
 
+import meta.current
 import meta.exceptions
 import meta.shell
 from meta.api import filesystem
@@ -114,10 +115,11 @@ def test_folder_path_initialization(
     assert test_folder.name == "myfolder"
 
 
-def test_file_deletion(basic_file, shell_mock):
+def test_file_deletion(basic_file, shell_mock, common_autotracker):
     """Ensure that deleting a file calls the correct shell command."""
     basic_file.delete()
     shell_mock.assert_called_with("rm " + "/path/to/myfile.txt")
+    assert not meta.current.PACKAGE_AUTOTRACKER.check_file("/path/to/myfile.txt")
 
 
 COPY_FILE_TEST_PARAMS = [
@@ -139,6 +141,7 @@ def test_file_copy(
     abspath_mock,
     chdir_mock,
     shell_mock,
+    common_autotracker,
     passed_dest,
     expected_dest_path,
     expected_dest_name,
@@ -147,6 +150,7 @@ def test_file_copy(
     abspath_mock(expected_dest_path)
     basic_file.copy(passed_dest)
     shell_mock.assert_called_with("cp /path/to/myfile.txt " + expected_dest_path)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_file(expected_dest_path)
 
 
 @pytest.mark.parametrize(
@@ -187,6 +191,7 @@ def test_folder_copy(
     abspath_mock,
     chdir_mock,
     shell_mock,
+    common_autotracker,
     passed_dest,
     expected_dest_path,
     expected_dest_name,
@@ -195,6 +200,7 @@ def test_folder_copy(
     abspath_mock(expected_dest_path)
     basic_folder.copy(passed_dest)
     shell_mock.assert_called_with("cp -R /path/to/myfolder " + expected_dest_path)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_file(expected_dest_path)
 
 
 @pytest.mark.parametrize(
@@ -220,19 +226,28 @@ def test_folder_copy_return(
     "passed_dest, expected_dest_path", [i[0:2] for i in COPY_FOLDER_TEST_PARAMS]
 )
 def test_folder_move(
-    abspath_mock, chdir_mock, shell_mock, basic_folder, passed_dest, expected_dest_path
+    abspath_mock,
+    chdir_mock,
+    shell_mock,
+    basic_folder,
+    common_autotracker,
+    passed_dest,
+    expected_dest_path,
 ):
     """Ensure moving a folder results in the correct shell command."""
     abspath_mock(expected_dest_path)
     basic_folder.move(passed_dest)
     shell_mock.assert_called_with("mv /path/to/myfolder " + expected_dest_path)
+    assert meta.current.PACKAGE_AUTOTRACKER.check_file(expected_dest_path)
+    assert not meta.current.PACKAGE_AUTOTRACKER.check_file("/path/to/myfolder")
 
 
-def test_folder_creation(abspath_mock, listdir_blank_mock, shell_mock):
+def test_folder_creation(abspath_mock, listdir_blank_mock, shell_mock, common_autotracker):
     """Ensure creating a folder calls the correct shell command."""
     abspath_mock("/path/to/folder")
     filesystem.create_folder("/path/to/folder")
     shell_mock.assert_called_with("mkdir /path/to/folder")
+    assert meta.current.PACKAGE_AUTOTRACKER.check_file("/path/to/folder")
 
 
 def test_folder_creation_return(abspath_mock, listdir_blank_mock, shell_mock):
@@ -270,11 +285,12 @@ def test_forced_relative_folder_creation_passes(
         pytest.fail("Unexpected RelativePathUnwise")
 
 
-def test_file_creation(abspath_mock, shell_mock):
+def test_file_creation(abspath_mock, shell_mock, common_autotracker):
     """Ensure creating a file calls the correct shell command."""
     abspath_mock("/path/to/file.txt")
     filesystem.create_file("/path/to/file.txt")
     shell_mock.assert_called_with("touch /path/to/file.txt")
+    assert meta.current.PACKAGE_AUTOTRACKER.check_file("/path/to/file.txt")
 
 
 def test_file_creation_return(abspath_mock, shell_mock):
