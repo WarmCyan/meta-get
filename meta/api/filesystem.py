@@ -9,6 +9,7 @@ import logging
 import os
 import platform
 
+import meta.current
 import meta.shell
 from meta.exceptions import RelativePathUnwise
 
@@ -46,6 +47,19 @@ class _FileUnit:
 
         # execute the movement shell command
         meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
+
+        # handle autotracker changes
+        try:
+            meta.current.PACKAGE_AUTOTRACKER.files.remove(self.path)
+        except ValueError:
+            logging.warning(
+                "Moved file %s that was not previously tracked by the autotracker",
+                self.path,
+            )
+        meta.current.PACKAGE_AUTOTRACKER.files.append(resolved_path)
+
+        # update the path
+        self.path = resolved_path
 
     def resolve_path(self, unresolved_path):
         """Handles fixing any relative paths.
@@ -122,6 +136,9 @@ class Folder(_FileUnit):
         # execute the command
         meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
 
+        # add copy to autotracker
+        meta.current.PACKAGE_AUTOTRACKER.files.append(resolved_path)
+
         # return an instance of the new copy
         new_copy = Folder(resolved_path)
         return new_copy
@@ -170,6 +187,9 @@ class File(_FileUnit):
 
         meta.shell.execute("{0} {1} {2}".format(cmd, self.path, resolved_path))
 
+        # add copy to autotracker
+        meta.current.PACKAGE_AUTOTRACKER.files.append(resolved_path)
+
         # return an instance of the new copy
         new_copy = File(resolved_path)
         return new_copy
@@ -216,6 +236,9 @@ def create_folder(path, force=False):
 
     meta.shell.execute("{0} {1}".format(cmd, path))
 
+    # add to autotracker
+    meta.current.PACKAGE_AUTOTRACKER.files.append(path)
+
     # make and return a Folder instance pointing to it
     new_folder = Folder(path)
     return new_folder
@@ -245,6 +268,9 @@ def create_file(path, force=False):
         cmd = "copy NUL"
 
     meta.shell.execute("{0} {1}".format(cmd, path))
+
+    # add to autotracker
+    meta.current.PACKAGE_AUTOTRACKER.files.append(path)
 
     # make and return a File instance pointing to it
     new_file = File(path)

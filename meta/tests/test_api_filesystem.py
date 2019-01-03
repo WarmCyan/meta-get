@@ -238,11 +238,14 @@ def test_folder_move(
     abspath_mock(expected_dest_path)
     basic_folder.move(passed_dest)
     shell_mock.assert_called_with("mv /path/to/myfolder " + expected_dest_path)
+    assert basic_folder.path == expected_dest_path
     assert meta.current.PACKAGE_AUTOTRACKER.check_file(expected_dest_path)
     assert not meta.current.PACKAGE_AUTOTRACKER.check_file("/path/to/myfolder")
 
 
-def test_folder_creation(abspath_mock, listdir_blank_mock, shell_mock, common_autotracker):
+def test_folder_creation(
+    abspath_mock, listdir_blank_mock, shell_mock, common_autotracker
+):
     """Ensure creating a folder calls the correct shell command."""
     abspath_mock("/path/to/folder")
     filesystem.create_folder("/path/to/folder")
