@@ -36,14 +36,6 @@ def abspath_mock(mocker):
 
 
 @pytest.fixture
-def listdir_blank_mock(mocker):
-    """Mock for os.listdir, returning just a blank array."""
-    listdir_mock = mocker.patch("os.listdir", autospec=True)
-    listdir_mock.return_value = []
-    return listdir_mock
-
-
-@pytest.fixture
 def chdir_mock(mocker):
     """Mock to avoid changing to a non-existant directory."""
     dir_mock = mocker.patch("os.chdir", autospec=True)

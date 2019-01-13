@@ -24,16 +24,21 @@ Filesystem
 .. autofunction:: create_file
 
 Folder
-======
+######
 .. autoclass:: Folder
     :members:
     :inherited-members:
 
 File
-====
+####
 .. autoclass:: File
     :members:
     :inherited-members:
+
+Git
+###
+.. automodule:: meta.api.git
+.. autofunction:: clone
 
 Pacman
 ######
