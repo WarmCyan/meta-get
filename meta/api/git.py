@@ -15,9 +15,10 @@ import meta.shell
 
 def clone(url, destination=None, silent=False):
     """Clones the desired github repo locally.
-    
+
     :param str url: The URL to the git repository
-    :param str destination: Where to clone the repository locally. By default this is based on a configuration variable in ``meta.current``
+    :param str destination: Where to clone the repository locally. By default this is based on a
+    configuration variable in ``meta.current``
     :param bool silent: Whether to suppress console output of the command or not
     :returns: A ``Folder`` instance pointing to the new local repository folder
     """
