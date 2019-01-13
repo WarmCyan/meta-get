@@ -9,3 +9,4 @@ NOTE: Unsure if this is the best place for this information, so it may end up mo
 point."""
 
 PACKAGE_AUTOTRACKER = None
+REPO_DIR = "~/.meta-get"

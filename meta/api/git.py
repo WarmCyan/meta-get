@@ -10,5 +10,5 @@ import logging
 import meta.shell
 
 
-def clone(url, directory=None, silent=False):
+def clone(url, destination=None, silent=False):
     pass
