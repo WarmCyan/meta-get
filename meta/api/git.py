@@ -32,11 +32,10 @@ def clone(url, destination=None, silent=False):
 
     logging.info("Git API cloning into %s", destination)
 
-    meta.shell.execute("git clone {0} {1}".format(url, destination), silent)
+    meta.shell.execute("git clone {0} {1}".format(url, dest_path), silent=silent)
+    local_repo = Folder(dest_path)
 
     # add to autotracker
-    meta.current.PACKAGE_AUTOTRACKER.files.append(dest_path)
+    meta.current.PACKAGE_AUTOTRACKER.files.append(local_repo.path)
 
-    # return a folder of the new local_repo
-    local_repo = Folder(dest_path)
     return local_repo
