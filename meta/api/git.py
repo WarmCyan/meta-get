@@ -6,6 +6,7 @@
 """API for interacting with git repositories."""
 
 import logging
+import os
 
 from meta.api.filesystem import Folder
 import meta.current
@@ -27,7 +28,7 @@ def clone(url, destination=None, silent=False):
     # determine where to clone the repo
     dest_path = meta.current.REPO_DIR + "/" + name
     if destination is not None:
-        dest_path = destination
+        dest_path = os.path.abspath(os.path.expanduser(os.path.expandvars(destination)))
         name = destination[destination.rfind("/") + 1 :]
 
     logging.info("Git API cloning into %s", destination)
