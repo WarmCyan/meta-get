@@ -30,6 +30,8 @@ def test_clone_cmd_dest(shell_mock, common_autotracker, listdir_blank_mock):
     repo = "https://github.com/WildfireXIII/test.git"
     folder = meta.api.git.clone(repo, destination="~/testing")
     dest_path = os.path.expanduser("~/testing")
-    shell_mock.assert_called_with("git clone {0} {1}".format(repo, dest_path), silent=False)
+    shell_mock.assert_called_with(
+        "git clone {0} {1}".format(repo, dest_path), silent=False
+    )
     assert folder.path == os.path.expanduser("~/testing")
     assert meta.current.PACKAGE_AUTOTRACKER.check_file(folder.path)
